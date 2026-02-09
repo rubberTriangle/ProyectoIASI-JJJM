@@ -1,0 +1,7 @@
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/ProyectoIASI.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/edit_cache.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/rebuild_cache.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/list_install_components.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/install.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/install/local.dir
+/home/jorge/dev/ProyectoIASI/build/Desktop_Qt_6_10_1-Debug/CMakeFiles/install/strip.dir
