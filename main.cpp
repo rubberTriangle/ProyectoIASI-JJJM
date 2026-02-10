@@ -6,6 +6,7 @@ using namespace std;
 int main()
 {
     int ancho, alto;
+    cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
     cin >> ancho >> alto;
 
     ifstream archivo("ficheros/HORAPUNTA1.txt");
