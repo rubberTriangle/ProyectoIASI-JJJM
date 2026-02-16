@@ -1,14 +1,14 @@
 #ifndef VEHICULO_H
 #define VEHICULO_H
 
-#include <vector>
+#include <list>
 
 //PRE: todas las partes del vehiculo están en línea y tiene al menos 2
 class Vehiculo
 {
 public://miembros expuestos para evitar llamadas innecesarias
     bool vertical, horizontal;
-    std::vector<std::pair<int,int>> partes;
+    std::list<std::pair<int,int>> partes;//orden: desde izquierd/arriba a derecha/abajo
     int longitud;
     char letra;
     
