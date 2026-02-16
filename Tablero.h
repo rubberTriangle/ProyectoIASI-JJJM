@@ -20,11 +20,12 @@ private:
     void procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> &m);
     void importarMatriz();
 public:
+    enum direccion{IZQUIERDA, ARRIBA, DERECHA, ABAJO};
     vector<vector<Vehiculo*>> matriz;
     Tablero();
     void mostrarMatriz();
-    vector<pair<Vehiculo, int>> movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
-    void realizarMovimiento(pair<Vehiculo, int> v);
+    vector<pair<Vehiculo, direccion> > movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
+    void realizarMovimiento(pair<Vehiculo, direccion> v);
     
     ~Tablero();
 };

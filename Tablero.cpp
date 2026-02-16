@@ -70,40 +70,39 @@ void Tablero::mostrarMatriz(){
     }
 }
 
-vector<pair<Vehiculo, int>> Tablero::movimientosPosibles()
+vector<pair<Vehiculo, Tablero::direccion>> Tablero::movimientosPosibles()
 {
-    vector<pair<Vehiculo, int>> sol;
+    vector<pair<Vehiculo, direccion>> sol;
 
     if(posX.first > 0){ // Izquierda
         if(matriz[posX.first-1][posX.second]->horizontal){
-            sol.push_back(pair(*matriz[posX.first-1][posX.second], 2));
+            sol.push_back(pair(*matriz[posX.first-1][posX.second], IZQUIERDA));
         }
     }
 
     if(posX.second > 0){ // Abajo
         if(matriz[posX.first][posX.second+1]->horizontal){
-            sol.push_back(pair(*matriz[posX.first][posX.second+1], 1));
+            sol.push_back(pair(*matriz[posX.first][posX.second+1], ABAJO));
         }
     }
 
     if(posX.first < alto - 1){ // Arriba
         if(matriz[posX.first][posX.second-1]->horizontal){
-            sol.push_back(pair(*matriz[posX.first][posX.second-1], 3));
+            sol.push_back(pair(*matriz[posX.first][posX.second-1], ARRIBA));
         }
     }
 
     if(posX.first < ancho - 1){ // Derecha
         if(matriz[posX.first+1][posX.second]->horizontal){
-            sol.push_back(pair(*matriz[posX.first+1][posX.second], 0));
+            sol.push_back(pair(*matriz[posX.first+1][posX.second], DERECHA));
         }
     }
 
     return sol;
 }
 
-void Tablero::realizarMovimiento(pair<Vehiculo, int> v)
-{
-
+void Tablero::realizarMovimiento(pair<Vehiculo, Tablero::direccion> v){
+    
 }
 
 Tablero::~Tablero(){
