@@ -1,5 +1,6 @@
 #include "Tablero.h"
 #include <iostream>
+#include <unordered_map>
 
 Tablero::Tablero() {
     cout << "Introduce el tablero que quieres utilizar: " << endl;
@@ -10,7 +11,30 @@ Tablero::Tablero() {
 }
 
 void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> & m){
+    std::unordered_map<char, Vehiculo*> vmap;
+    m.assign(chmat.size(), std::vector<Vehiculo*>(chmat[0].size()));
+    for(int i = 0; i < chmat.size(); i++)
+        for(int j = 0; j < chmat[0].size(); j++){
+            char current = chmat[i][j];
+            Vehiculo* cv;
+            if(vmap.count(current) == 0){//no está el vehiculo
+                cv = new Vehiculo();
+                vehiculos.push_back(cv);
+                vmap.insert({current, cv});
+            }else{
+                cv = (*vmap.find(current)).second;
+            }
+            cv->partes.push_back({i,j});
+            m[i][j] = cv;
+        }
     
+    for(auto it = vehiculos.begin(); it != vehiculos.end(); it++){
+        int lh, lv;
+        lh = (*it)->partes.back().first - (*it)->partes.front().first;
+        lv = (*it)->partes.back().second - (*it)->partes.front().second;
+        (*it)->vertical = (lv != 0);
+        (*it)->longitud = std::max(lv, lh);
+    }
 }
 void Tablero::importarMatriz(){
     
@@ -47,4 +71,9 @@ void Tablero::mostrarMatriz(){
         }
         cout << endl;
     }
+}
+
+Tablero::~Tablero(){
+    for(auto it = vehiculos.begin(); it != vehiculos.end(); it++)
+        delete *it;
 }

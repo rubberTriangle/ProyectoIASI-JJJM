@@ -3,6 +3,7 @@
 
 #include <vector>
 
+//PRE: todas las partes del vehiculo están en línea y tiene al menos 2
 class Vehiculo
 {
 public://miembros expuestos para evitar llamadas innecesarias
