@@ -18,7 +18,7 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
             char current = chmat[i][j];
             Vehiculo* cv;
             if(vmap.count(current) == 0){//no está el vehiculo
-                cv = new Vehiculo();
+                cv = new Vehiculo(current);
                 vehiculos.push_back(cv);
                 vmap.insert({current, cv});
             }else{
@@ -62,7 +62,7 @@ void Tablero::importarMatriz(){
 void Tablero::mostrarMatriz(){
     for(int j = 0; j < alto; j++){
         for(int i = 0; i < ancho; i++){
-            cout << matriz[j][i] << " ";
+            cout << matriz[j][i]->letra << " ";
         }
         cout << endl;
     }

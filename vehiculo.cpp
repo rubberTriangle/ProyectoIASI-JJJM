@@ -18,7 +18,7 @@ void Vehiculo::calcularDesdePartes(){
     longitud = std::max(dv, dh);
 }
 
-Vehiculo::Vehiculo() : vertical(false), horizontal(false) {}
+Vehiculo::Vehiculo(char letra) : vertical(false), horizontal(false), letra(letra) {}
 
-Vehiculo::Vehiculo(bool vertical, bool horizontal, std::initializer_list<std::pair<int,int>> &l)
-    : vertical(vertical), horizontal(horizontal), partes(l), longitud(l.size()) { }
+Vehiculo::Vehiculo(char letra, bool vertical, bool horizontal, std::initializer_list<std::pair<int,int>> &l)
+    : letra(letra), vertical(vertical), horizontal(horizontal), partes(l), longitud(l.size()) { }
