@@ -19,15 +19,18 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
         for(int j = 0; j < chmat[0].size(); j++){
             char current = chmat[i][j];
             Vehiculo* cv;
-            if(vmap.count(current) == 0){//no está el vehiculo
-                cv = new Vehiculo(current);
-                vehiculos.push_back(cv);
-                vmap.insert({current, cv});
-            }else{
-                cv = (*vmap.find(current)).second;
+            if(current == 'X')
+                posX = {i, j};
+            else{
+                if(vmap.count(current) == 0){//no está el vehiculo
+                    cv = new Vehiculo(current);
+                    vehiculos.push_back(cv);
+                    vmap.insert({current, cv});
+                }else
+                    cv = (*vmap.find(current)).second;
+                cv->partes.push_back({i,j});
+                m[i][j] = cv;
             }
-            cv->partes.push_back({i,j});
-            m[i][j] = cv;
         }
     
     for(auto it = vehiculos.begin(); it != vehiculos.end(); it++)
