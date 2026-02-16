@@ -4,7 +4,11 @@
 
 Tablero::Tablero() {
     cout << "Introduce el tablero que quieres utilizar: " << endl;
-    cin >> nombreTablero;
+    getline(std::cin, nombreTablero);
+
+    if (nombreTablero.empty()) {
+        nombreTablero = "HORAPUNTA1";
+    }
 
     cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
     cin >> ancho >> alto;
