@@ -73,7 +73,6 @@ void Tablero::mostrarMatriz(){
 vector<pair<Vehiculo, int>> Tablero::movimientosPosibles()
 {
     vector<pair<Vehiculo, int>> sol;
-    pair<int, int> posX;
 
     if(posX.first > 0){ // Izquierda
         if(matriz[posX.first-1][posX.second]->horizontal){
@@ -100,6 +99,11 @@ vector<pair<Vehiculo, int>> Tablero::movimientosPosibles()
     }
 
     return sol;
+}
+
+void Tablero::realizarMovimiento(pair<Vehiculo, int> v)
+{
+
 }
 
 Tablero::~Tablero(){
