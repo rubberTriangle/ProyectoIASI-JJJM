@@ -1,13 +1,16 @@
-#include "tablero.h"
+#include "Tablero.h"
+#include <iostream>
 
-tablero::tablero() {
+Tablero::Tablero() {
     cout << "Introduce el tablero que quieres utilizar: " << endl;
     cin >> nombreTablero;
-}
 
-void tablero::importaMatriz(){
     cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
     cin >> ancho >> alto;
+}
+
+void Tablero::importarMatriz(){
+    matriz.assign(ancho, vector<char>(alto));
 
     ifstream archivo("ficheros/" + nombreTablero + ".txt");
     string linea;
@@ -31,7 +34,7 @@ void tablero::importaMatriz(){
     }
 }
 
-void mostrarMatriz(){
+void Tablero::mostrarMatriz(){
     for(int j = 0; j < alto; j++){
         for(int i = 0; i < ancho; i++){
             cout << matriz[j][i] << " ";
