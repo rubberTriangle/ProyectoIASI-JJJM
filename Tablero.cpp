@@ -8,10 +8,12 @@ Tablero::Tablero() {
 
     if (nombreTablero.empty()) {
         nombreTablero = "HORAPUNTA1";
+        ancho = 6;
+        alto = 6;
+    }else{
+        cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
+        cin >> ancho >> alto;
     }
-
-    cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
-    cin >> ancho >> alto;
 
     importarMatriz();
 }
