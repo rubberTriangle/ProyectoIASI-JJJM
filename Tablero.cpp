@@ -67,7 +67,7 @@ void Tablero::importarMatriz(){
 void Tablero::mostrarMatriz(){
     for(int j = 0; j < alto; j++){
         for(int i = 0; i < ancho; i++){
-            cout << matriz[j][i]->letra << " ";
+            cout << (i==posX.first && j==posX.second ? 'X' : matriz[j][i]->letra) << " ";
         }
         cout << endl;
     }
