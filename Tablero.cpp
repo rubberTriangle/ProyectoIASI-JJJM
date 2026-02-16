@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 Tablero::Tablero() {
-    cout << "Introduce el tablero que quieres utilizar: " << endl;
+    cout << "Introduce el tablero que quieres utilizar (Presiona Enter para valores predeterminados): " << endl;
     getline(std::cin, nombreTablero);
 
     if (nombreTablero.empty()) {
