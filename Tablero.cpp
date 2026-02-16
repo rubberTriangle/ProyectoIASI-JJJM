@@ -102,7 +102,32 @@ vector<pair<Vehiculo, Tablero::direccion>> Tablero::movimientosPosibles()
 }
 
 void Tablero::realizarMovimiento(pair<Vehiculo, Tablero::direccion> v){
-    
+    Vehiculo* h;
+    std::pair<int,int> oldPosX = posX;
+    switch(v.second){
+    case IZQUIERDA:
+        h = matriz[oldPosX.first-1][oldPosX.second];
+        posX = h->partes.front();//el hueco pasa al extremo contrario del vehiculo
+        h->partes.pop_front();//quitamos un extremo del vehiculo
+        break;
+    case ARRIBA:
+        h = matriz[oldPosX.first][oldPosX.second+1];
+        posX = h->partes.front();//el hueco pasa al extremo contrario del vehiculo
+        h->partes.pop_front();//quitamos un extremo del vehiculo
+        break;
+    case DERECHA:
+        h = matriz[oldPosX.first+1][oldPosX.second];
+        posX = h->partes.back();//el hueco pasa al extremo contrario del vehiculo
+        h->partes.pop_back();//quitamos un extremo del vehiculo
+        break;
+    case ABAJO:
+        h = matriz[oldPosX.first][oldPosX.second-1];
+        posX = h->partes.back();//el hueco pasa al extremo contrario del vehiculo
+        h->partes.pop_back();//quitamos un extremo del vehiculo
+        break;
+    }
+    matriz[oldPosX.first][oldPosX.second] = h;//movemos en el tablero
+    h->partes.push_back(oldPosX);//movemos la parte quitada al otro extremo
 }
 
 Tablero::~Tablero(){
