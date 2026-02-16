@@ -116,25 +116,28 @@ void Tablero::realizarMovimiento(pair<Vehiculo, Tablero::direccion> v){
         h = matriz[oldPosX.first-1][oldPosX.second];
         posX = h->partes.front();//el hueco pasa al extremo contrario del vehiculo
         h->partes.pop_front();//quitamos un extremo del vehiculo
+        h->partes.push_back(oldPosX);//movemos la parte quitada al otro extremo        
         break;
     case ARRIBA:
         h = matriz[oldPosX.first][oldPosX.second+1];
         posX = h->partes.front();//el hueco pasa al extremo contrario del vehiculo
         h->partes.pop_front();//quitamos un extremo del vehiculo
+        h->partes.push_back(oldPosX);//movemos la parte quitada al otro extremo        
         break;
     case DERECHA:
         h = matriz[oldPosX.first+1][oldPosX.second];
         posX = h->partes.back();//el hueco pasa al extremo contrario del vehiculo
         h->partes.pop_back();//quitamos un extremo del vehiculo
+        h->partes.push_front(oldPosX);//movemos la parte quitada al otro extremo        
         break;
     case ABAJO:
         h = matriz[oldPosX.first][oldPosX.second-1];
         posX = h->partes.back();//el hueco pasa al extremo contrario del vehiculo
         h->partes.pop_back();//quitamos un extremo del vehiculo
+        h->partes.push_front(oldPosX);//movemos la parte quitada al otro extremo
         break;
     }
     matriz[oldPosX.first][oldPosX.second] = h;//movemos en el tablero
-    h->partes.push_back(oldPosX);//movemos la parte quitada al otro extremo
 }
 
 Tablero::~Tablero(){
