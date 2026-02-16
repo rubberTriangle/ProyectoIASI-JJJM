@@ -8,8 +8,7 @@
 
 using namespace std;
 
-class Tablero
-{
+class Tablero {
 private:
     int ancho, alto;
     string nombreTablero;
