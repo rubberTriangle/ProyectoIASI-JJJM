@@ -7,12 +7,15 @@
 class Vehiculo
 {
 public://miembros expuestos para evitar llamadas innecesarias
-    bool vertical;
+    bool vertical, horizontal;
     std::vector<std::pair<int,int>> partes;
     int longitud;
     
+    //averigua su direccion y longitud en base a partes y guarda el resultado en este objeto
+    void calcularDesdePartes();
+    
     Vehiculo();
-    Vehiculo(bool vertical, std::initializer_list<std::pair<int,int>> &l);
+    Vehiculo(bool vertical, bool horizontal, std::initializer_list<std::pair<int,int>> &l);
 };
 
 #endif // VEHICULO_H

@@ -28,13 +28,8 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
             m[i][j] = cv;
         }
     
-    for(auto it = vehiculos.begin(); it != vehiculos.end(); it++){
-        int lh, lv;
-        lh = (*it)->partes.back().first - (*it)->partes.front().first;
-        lv = (*it)->partes.back().second - (*it)->partes.front().second;
-        (*it)->vertical = (lv != 0);
-        (*it)->longitud = std::max(lv, lh);
-    }
+    for(auto it = vehiculos.begin(); it != vehiculos.end(); it++)
+        (*it)->calcularDesdePartes();
 }
 void Tablero::importarMatriz(){
     
