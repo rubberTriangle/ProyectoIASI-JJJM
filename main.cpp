@@ -12,12 +12,13 @@ int main()
     vector<pair<Vehiculo, Tablero::direccion>> movimientosPosibles;
 
     movimientosPosibles = tablero.movimientosPosibles();
-    Tablero auxiliar;
+    Tablero* auxiliar;
 
     for (int i = 0; i < movimientosPosibles.size(); i++) {
-        auxiliar = tablero;
-        auxiliar.realizarMovimiento(movimientosPosibles[i]);
-        auxiliar.mostrarMatriz();
+        auxiliar = new Tablero(tablero);
+        auxiliar->realizarMovimiento(movimientosPosibles[i]);
+        auxiliar->mostrarMatriz();
+        delete auxiliar;
         cout << endl;
     }
 
