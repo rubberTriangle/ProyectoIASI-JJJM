@@ -9,7 +9,7 @@ int main()
     Tablero tablero;
     tablero.mostrarMatriz();
     cout << endl;
-    vector<pair<Vehiculo, Tablero::direccion>> movimientosPosibles;
+    vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
 
     movimientosPosibles = tablero.movimientosPosibles();
     Tablero* auxiliar;
