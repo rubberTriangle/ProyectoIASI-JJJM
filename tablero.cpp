@@ -1,3 +1,9 @@
 #include "tablero.h"
 
-tablero::tablero() {}
+tablero::tablero() {
+
+    private:
+    int ancho, alto;
+    public:
+
+}
