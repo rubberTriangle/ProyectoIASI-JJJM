@@ -23,8 +23,8 @@ public:
     vector<vector<Vehiculo*>> matriz;
     Tablero();
     void mostrarMatriz();
-    vector<pair<Vehiculo, direccion> > movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
-    void realizarMovimiento(pair<Vehiculo, direccion> v);
+    vector<pair<Vehiculo*, direccion> > movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
+    void realizarMovimiento(pair<Vehiculo*, direccion> v);
     
     ~Tablero();
 };

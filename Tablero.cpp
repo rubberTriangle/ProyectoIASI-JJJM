@@ -79,38 +79,38 @@ void Tablero::mostrarMatriz(){
     }
 }
 
-vector<pair<Vehiculo, Tablero::direccion>> Tablero::movimientosPosibles()
+vector<pair<Vehiculo*, Tablero::direccion>> Tablero::movimientosPosibles()
 {
-    vector<pair<Vehiculo, direccion>> sol;
+    vector<pair<Vehiculo*, direccion>> sol;
 
     if(posX.first > 0){ // Izquierda
         if(matriz[posX.first-1][posX.second]->horizontal){
-            sol.push_back(pair(*matriz[posX.first-1][posX.second], IZQUIERDA));
+            sol.push_back(pair(matriz[posX.first-1][posX.second], IZQUIERDA));
         }
     }
 
     if(posX.second > 0){ // Abajo
         if(matriz[posX.first][posX.second+1]->vertical){
-            sol.push_back(pair(*matriz[posX.first][posX.second+1], ABAJO));
+            sol.push_back(pair(matriz[posX.first][posX.second+1], ABAJO));
         }
     }
 
     if(posX.first < alto - 1){ // Arriba
         if(matriz[posX.first][posX.second-1]->vertical){
-            sol.push_back(pair(*matriz[posX.first][posX.second-1], ARRIBA));
+            sol.push_back(pair(matriz[posX.first][posX.second-1], ARRIBA));
         }
     }
 
     if(posX.first < ancho - 1){ // Derecha
         if(matriz[posX.first+1][posX.second]->horizontal){
-            sol.push_back(pair(*matriz[posX.first+1][posX.second], DERECHA));
+            sol.push_back(pair(matriz[posX.first+1][posX.second], DERECHA));
         }
     }
 
     return sol;
 }
 
-void Tablero::realizarMovimiento(pair<Vehiculo, Tablero::direccion> v){
+void Tablero::realizarMovimiento(pair<Vehiculo*, Tablero::direccion> v){
     Vehiculo* h;
     std::pair<int,int> oldPosX = posX;
     switch(v.second){
