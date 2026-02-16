@@ -9,8 +9,12 @@ Tablero::Tablero() {
     cin >> ancho >> alto;
 }
 
+void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> & m){
+    
+}
 void Tablero::importarMatriz(){
-    matriz.assign(ancho, vector<char>(alto));
+    
+    std::vector<std::vector<char>> chmat(ancho, vector<char>(alto));
 
     ifstream archivo("ficheros/" + nombreTablero + ".txt");
     string linea;
@@ -21,7 +25,7 @@ void Tablero::importarMatriz(){
             int k = 0;
             for(int i = 0; i < linea.size(); i++){
                 if(linea[i] != ','){
-                    matriz[j][k] = linea[i];
+                    chmat[j][k] = linea[i];
                     k++;
                 }
             }
@@ -29,6 +33,8 @@ void Tablero::importarMatriz(){
         }
 
         archivo.close();
+        
+        procesarMatriz(chmat, matriz);
     }else{
         cerr << "No se ha abierto el fichero correctamente";
     }
