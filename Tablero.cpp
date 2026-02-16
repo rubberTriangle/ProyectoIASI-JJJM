@@ -8,6 +8,8 @@ Tablero::Tablero() {
 
     cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
     cin >> ancho >> alto;
+
+    importarMatriz();
 }
 
 void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> & m){
@@ -66,6 +68,38 @@ void Tablero::mostrarMatriz(){
         }
         cout << endl;
     }
+}
+
+vector<pair<Vehiculo, int>> Tablero::movimientosPosibles()
+{
+    vector<pair<Vehiculo, int>> sol;
+    pair<int, int> posX;
+
+    if(posX.first > 0){ // Izquierda
+        if(matriz[posX.first-1][posX.second]->horizontal){
+            sol.push_back(pair(*matriz[posX.first-1][posX.second], 2));
+        }
+    }
+
+    if(posX.second > 0){ // Abajo
+        if(matriz[posX.first][posX.second+1]->horizontal){
+            sol.push_back(pair(*matriz[posX.first][posX.second+1], 1));
+        }
+    }
+
+    if(posX.first < alto - 1){ // Arriba
+        if(matriz[posX.first][posX.second-1]->horizontal){
+            sol.push_back(pair(*matriz[posX.first][posX.second-1], 3));
+        }
+    }
+
+    if(posX.first < ancho - 1){ // Derecha
+        if(matriz[posX.first+1][posX.second]->horizontal){
+            sol.push_back(pair(*matriz[posX.first+1][posX.second], 0));
+        }
+    }
+
+    return sol;
 }
 
 Tablero::~Tablero(){

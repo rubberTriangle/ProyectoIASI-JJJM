@@ -17,11 +17,12 @@ private:
     
     //PRE: chmat debe tener al menos 1 elemento
     void procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> &m);
+    void importarMatriz();
 public:
     vector<vector<Vehiculo*>> matriz;
     Tablero();
-    void importarMatriz();
     void mostrarMatriz();
+    vector<pair<Vehiculo, int>> movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
     
     ~Tablero();
 };
