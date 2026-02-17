@@ -17,10 +17,10 @@ int main()
 
     for (int i = 0; i < movimientosPosibles.size(); i++) {
         cout << "Posible movimiento " << i+1 << ':' << endl;
-        
         auxiliar = new Tablero(tablero);
         //traducción de movimiento en tablero original a tablero nuevo
         movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
+        cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
         
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
         auxiliar->mostrarMatriz();
