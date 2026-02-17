@@ -3,10 +3,9 @@
 
 #include <list>
 
-//PRE: todas las partes del vehiculo están en línea y tiene al menos 2
-class Vehiculo
+//PRE: todas las partes del vehiculo están en línea y tiene al menos 1
+struct Vehiculo
 {
-public://miembros expuestos para evitar llamadas innecesarias
     bool vertical, horizontal;
     std::list<std::pair<int,int>> partes;//orden: desde izquierd/arriba a derecha/abajo
     int longitud;
