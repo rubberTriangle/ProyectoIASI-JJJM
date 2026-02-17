@@ -18,6 +18,18 @@ Tablero::Tablero() {
     importarMatriz();
 }
 
+Tablero::Tablero(const Tablero &other)
+    : ancho(other.ancho), alto(other.alto), nombreTablero(other.nombreTablero), posX(other.posX){
+    
+    matriz.assign(other.matriz.size(), vector<Vehiculo*>(other.matriz[0].size()));
+    for(auto it = other.vehiculos.begin(); it != other.vehiculos.end(); it++){
+        Vehiculo* cv = new Vehiculo(**it);
+        vehiculos.push_back(cv);
+        for(pair<int,int> p : cv->partes)
+            matriz[p.first][p.second] = cv;
+    }
+}
+
 void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> & m){
     std::unordered_map<char, Vehiculo*> vmap;
     m.assign(chmat.size(), std::vector<Vehiculo*>(chmat[0].size()));
