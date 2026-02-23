@@ -152,6 +152,8 @@ void Tablero::realizarMovimiento(pair<Vehiculo*, Tablero::direccion> v){
         v.first->partes.pop_back();
         break;
     }
+    if(v.first->letra == 'Z')
+        posZ = v.first->partes.front();
 }
 
 Tablero::~Tablero(){
