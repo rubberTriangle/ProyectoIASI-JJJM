@@ -26,7 +26,7 @@ int main()
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
 
-        int h = auxiliar->calcHeuristica();
+        int h = auxiliar->calcHeuristicaSimple();
         if (h < mejorH) {
             mejorH = h;
         }

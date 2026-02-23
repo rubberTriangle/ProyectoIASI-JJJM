@@ -95,7 +95,7 @@ void Tablero::mostrarMatriz(){
     }
 }
 
-int Tablero::calcHeuristica(){
+int Tablero::calcHeuristicaSimple(){
     int hX, hZ;
 
     hX = abs(posZ.first - posX.first) + abs(posZ.second - posX.second);
