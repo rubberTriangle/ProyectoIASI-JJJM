@@ -1,6 +1,7 @@
 #include "Tablero.h"
 #include <iostream>
 #include <unordered_map>
+#include <algorithm>
 
 Tablero::Tablero() {
     cout << "Introduce el tablero que quieres utilizar (Presiona Enter para valores predeterminados): " << endl;
@@ -99,7 +100,7 @@ int Tablero::calcHeuristica(){
 
     hX = abs(posZ.first - posX.first) + abs(posZ.second - posX.second);
 
-    hZ = min(abs(posZ.first - ancho), min(posZ.first, min(posZ.second, abs(posZ.second - alto))));
+    hZ = min({abs(posZ.first - ancho), posZ.first, posZ.second, abs(posZ.second - alto)});
 
     return hX + hZ;
 }
