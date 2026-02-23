@@ -20,7 +20,7 @@ Tablero::Tablero() {
 }
 
 Tablero::Tablero(const Tablero &other)
-    : ancho(other.ancho), alto(other.alto), nombreTablero(other.nombreTablero), posX(other.posX){
+    : ancho(other.ancho), alto(other.alto), nombreTablero(other.nombreTablero), posX(other.posX), posZ(other.posZ){
     
     matriz.assign(other.matriz.size(), vector<Vehiculo*>(other.matriz[0].size()));
     for(auto it = other.vehiculos.begin(); it != other.vehiculos.end(); it++){
