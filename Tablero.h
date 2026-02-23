@@ -14,6 +14,7 @@ private:
     string nombreTablero;
     std::list<Vehiculo*> vehiculos;
     pair<int, int> posX;
+    pair<int, int> posZ;
     
     //PRE: chmat debe tener al menos 1 elemento
     void procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> &m);
@@ -27,6 +28,7 @@ public:
     void mostrarMatriz();
     vector<pair<Vehiculo*, direccion> > movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
     void realizarMovimiento(pair<Vehiculo*, direccion> v);
+    int calcHeuristica();
     
     ~Tablero();
 };

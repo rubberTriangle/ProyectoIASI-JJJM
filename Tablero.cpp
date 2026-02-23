@@ -37,9 +37,11 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
         for(int j = 0; j < chmat[0].size(); j++){
             char current = chmat[i][j];
             Vehiculo* cv;
-            if(current == 'X')
+            if(current == 'X'){
                 posX = {i, j};
-            else{
+            }else if(current == 'Z'){
+                posZ = {i, j};
+            }else{
                 if(vmap.count(current) == 0){//no está el vehiculo
                     cv = new Vehiculo(current);
                     vehiculos.push_back(cv);
@@ -54,6 +56,7 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
     for(auto it = vehiculos.begin(); it != vehiculos.end(); it++)
         (*it)->calcularDesdePartes();
 }
+
 void Tablero::importarMatriz(){
     
     std::vector<std::vector<char>> chmat(ancho, vector<char>(alto));
@@ -91,8 +94,17 @@ void Tablero::mostrarMatriz(){
     }
 }
 
-vector<pair<Vehiculo*, Tablero::direccion>> Tablero::movimientosPosibles()
-{
+int Tablero::calcHeuristica(){
+    int hX, hZ;
+
+    hX = abs(posZ.first - posX.first) + abs(posZ.second - posX.second);
+
+    hZ = min(abs(posZ.first - ancho), min(posZ.first, min(posZ.second, abs(posZ.second - alto))));
+
+    return hX + hZ;
+}
+
+vector<pair<Vehiculo*, Tablero::direccion>> Tablero::movimientosPosibles(){
     vector<pair<Vehiculo*, direccion>> sol;
 
     if(posX.first > 0){ // Izquierda
