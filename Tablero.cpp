@@ -39,9 +39,9 @@ void Tablero::procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Ve
             Vehiculo* cv;
             if(current == 'X'){
                 posX = {i, j};
-            }else if(current == 'Z'){
-                posZ = {i, j};
             }else{
+                if(current == 'Z')
+                    posZ = {i, j};
                 if(vmap.count(current) == 0){//no está el vehiculo
                     cv = new Vehiculo(current);
                     vehiculos.push_back(cv);
