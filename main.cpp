@@ -24,12 +24,13 @@ int main()
         //traducción de movimiento en tablero original a tablero nuevo
         movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
-        if (auxiliar->calcHeuristica() < mejorH) {
-            mejorH = auxiliar -> calcHeuristica();
-        }
-
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
-        cout << " - h' = " << auxiliar -> calcHeuristica() << endl;;
+
+        int h = auxiliar->calcHeuristica();
+        if (h < mejorH) {
+            mejorH = h;
+        }
+        cout << " - h' = " << h << endl;;
         auxiliar->mostrarMatriz();
         delete auxiliar;
         cout << endl;
