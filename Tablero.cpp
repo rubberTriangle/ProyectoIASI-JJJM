@@ -95,7 +95,7 @@ void Tablero::mostrarMatriz(){
     }
 }
 
-int Tablero::calcHeuristicaSimple(){
+int Tablero::calcHeuristicaSimple() const{
     int hX, hZ;
 
     hX = abs(posZ.first - posX.first) + abs(posZ.second - posX.second);
@@ -103,6 +103,58 @@ int Tablero::calcHeuristicaSimple(){
     hZ = min({abs(posZ.first - ancho), posZ.first, posZ.second, abs(posZ.second - alto)});
 
     return hX + hZ;
+}
+
+int Tablero::calcHeuristicaVehiculos() const{
+    int hZ, hX;
+    //distancia entre dos puntos en un mismo eje horizontal o vertical medida en vehiculos entre medias repetidos
+    auto distVs = [&](std::pair<int,int> pos1, std::pair<int,int> pos2){
+        int cont = 0;
+        unordered_map<Vehiculo*,Vehiculo*> table;//tan sólo necesitamos comprobar que no se repitan punteros (también se podrían obtener las letras)
+        //Se podrá reducir la duplicación de código entre estos dos bloques?
+        if(pos1.first == pos2.first){//vertical
+            int end = std::max(pos1.second, pos2.second);
+            for(int i = std::min(pos1.second, pos2.second); i < end; i++){
+                if(table.count(matriz[pos1.first][i]) == 0){
+                    cont++;
+                    table.insert({matriz[pos1.first][i],matriz[pos1.first][i]});
+                }
+            }
+        }else{//horizontal
+            int end = std::max(pos1.first, pos2.first);
+            for(int i = std::min(pos1.first, pos2.first); i < end; i++){
+                if(table.count(matriz[i][pos1.second]) == 0){
+                    cont++;
+                    table.insert({matriz[i][pos1.second],matriz[i][pos1.second]});
+                }
+            }            
+        }
+        return cont;
+    };
+    
+    hX = distVs(posX, posZ);
+    
+    //cual borde es el más cercano?
+    int borderDistsZ[4] = {abs(posZ.first - ancho), posZ.first, posZ.second, abs(posZ.second - alto)};
+    int mini = 0;
+    for(int i = 1; i < 4; i++)
+        if(borderDistsZ[i] < borderDistsZ[mini])
+            mini = i;
+    switch(mini){
+    case 0://derecho
+        hZ = distVs(posZ, {ancho-1, posZ.second});
+        break;
+    case 1://izquierdo
+        hZ = distVs(posZ, {0, posZ.second});
+        break;
+    case 2://arriba
+        hZ = distVs(posZ, {posZ.first, 0});
+        break;
+    case 3://abajo
+        hZ = distVs(posZ, {posZ.first, alto-1});
+        break;
+    }
+    return hZ + hX;
 }
 
 vector<pair<Vehiculo*, Tablero::direccion>> Tablero::movimientosPosibles(){
