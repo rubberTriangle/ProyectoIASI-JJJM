@@ -7,6 +7,20 @@ using namespace std;
 
 int main()
 {
+    string heuristicas[2] = {"Distancia Manhattan simple", "Distancia Manhattan por vehículos"};
+    string heuristicaSeleccionada;
+
+    cout << "Elige la heurística a utilizar: (Presiona Enter para valor predeterminado)" << endl;
+    for(int i = 0; i < 2; i++){
+        cout << "[" << i << "] " << heuristicas[i] << endl;
+    }
+
+    getline(std::cin, heuristicaSeleccionada);
+
+    if (heuristicaSeleccionada.empty()) {
+        heuristicaSeleccionada = "0";
+    }
+
     Tablero tablero;
     cout << "Matriz cargada:\n";
     tablero.mostrarMatriz();
