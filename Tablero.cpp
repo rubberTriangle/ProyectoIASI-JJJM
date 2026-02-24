@@ -89,7 +89,7 @@ void Tablero::importarMatriz(){
 void Tablero::mostrarMatriz(){
     for(int j = 0; j < alto; j++){
         for(int i = 0; i < ancho; i++){
-            cout << (j==posX.first && i==posX.second ? 'X' : matriz[j][i]->letra) << " ";
+            cout << "\e[38;5;" << ((j==posX.first && i==posX.second ? 'X' : matriz[j][i]->letra) * 7) % 216 + 16 << "m" << (j==posX.first && i==posX.second ? 'X' : matriz[j][i]->letra) << "\e[0m" << " ";
         }
         cout << endl;
     }
