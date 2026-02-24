@@ -8,9 +8,9 @@ Tablero::Tablero() {
     getline(std::cin, nombreTablero);
 
     if (nombreTablero.empty()) {
-        nombreTablero = "HORAPUNTA1";
-        ancho = 6;
-        alto = 6;
+        nombreTablero = "HORAPUNTA5";
+        ancho = 20;
+        alto = 20;
     }else{
         cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
         cin >> ancho >> alto;
@@ -90,8 +90,16 @@ void Tablero::mostrarMatriz(){
     for(int j = 0; j < alto; j++){
         for(int i = 0; i < ancho; i++){
             unsigned char C = (j==posX.first && i==posX.second ? 'X' : matriz[j][i]->letra);
-            cout << "\e[38;5;" << 16 + (36*(C*7%6)) + ((C*10%6+3)%6 * 6) + (C*15%6+2)%6 % 231 << "m" << C << "\e[0m" << " ";
-            //=16 + 36 × r + 6 × g + b (0 ≤ r, g, b ≤ 5)
+            if(C == 'X')
+                cout << "\e[38;2;0;0;0;48;2;255;255;255m";
+            else if(C == 'Z')
+                cout << "\e[38;2;0;0;0;48;2;255;0;0m";
+            else{
+                int colorBase = (C-65)*14;
+                cout << "\e[38:2::" << colorBase%256 << ':' << (colorBase+160)%256 << ':' << (colorBase+80)%256 << 'm';
+                //rgb                
+            }
+            cout << C << "\e[0m" << " ";
         }
         cout << endl;
     }
