@@ -132,10 +132,10 @@ int Tablero::calcHeuristicaVehiculos() const{
         return cont;
     };
     
-    hX = distVs(posX, posZ);
+    hX = distVs(posX, {posZ.first, posX.second}) + distVs(posZ, {posZ.first, posX.second});
     
     //cual borde es el más cercano?
-    int borderDistsZ[4] = {abs(posZ.first - ancho), posZ.first, posZ.second, abs(posZ.second - alto)};
+    int borderDistsZ[4] {abs(posZ.first - ancho), posZ.first, posZ.second, abs(posZ.second - alto)};
     int mini = 0;
     for(int i = 1; i < 4; i++)
         if(borderDistsZ[i] < borderDistsZ[mini])
@@ -154,6 +154,7 @@ int Tablero::calcHeuristicaVehiculos() const{
         hZ = distVs(posZ, {posZ.first, alto-1});
         break;
     }
+    //std::cout << "hX: " << hX << " | hZ: " << hZ << endl;
     return hZ + hX;
 }
 
