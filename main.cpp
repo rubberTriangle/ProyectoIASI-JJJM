@@ -20,6 +20,7 @@ int main()
     if (heuristicaSeleccionada.empty()) {
         heuristicaSeleccionada = "0";
     }
+    int hSelecIndex = std::stoi(heuristicaSeleccionada);
 
     Tablero tablero;
     cout << "Matriz cargada:\n";
@@ -39,8 +40,17 @@ int main()
         movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
+        
+        int h;
+        switch(hSelecIndex){
+        case 0:
+            h = auxiliar->calcHeuristicaSimple();
+            break;
+        case 1:
+            h = auxiliar->calcHeuristicaVehiculos();
+            break;
+        }
 
-        int h = auxiliar->calcHeuristicaSimple();
         if (h < mejorH) {
             mejorH = h;
         }
