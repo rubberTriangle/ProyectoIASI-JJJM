@@ -121,12 +121,13 @@ int Tablero::calcHeuristicaVehiculos() const{
     auto distVs = [&](std::pair<int,int> pos1, std::pair<int,int> pos2){
         int cont = 0;
         unordered_map<Vehiculo*,Vehiculo*> table;//tan sólo necesitamos comprobar que no se repitan punteros (también se podrían obtener las letras)
-        //Se podrá reducir la duplicación de código entre estos dos bloques?
-        int posicion1A = pos1.first, posicion1B = pos1.second, posicion2 = pos2.first;
+        
+        int posicion1A, posicion1B, posicion2;
 
         if(pos1.first == pos2.first){
             posicion1A = pos1.second, posicion1B = pos1.first, posicion2 = pos2.second;
-        }
+        }else
+            posicion1A = pos1.first, posicion1B = pos1.second, posicion2 = pos2.first;
 
         int end = std::max(posicion1A, posicion2);
         for(int i = std::min(posicion1A, posicion2); i < end; i++){
