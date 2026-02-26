@@ -8,9 +8,9 @@ Tablero::Tablero() {
     getline(std::cin, nombreTablero);
 
     if (nombreTablero.empty()) {
-        nombreTablero = "HORAPUNTA5";
-        ancho = 20;
-        alto = 20;
+        nombreTablero = "HORAPUNTA1";
+        ancho = 6;
+        alto = 6;
     }else{
         cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
         cin >> ancho >> alto;
@@ -122,22 +122,18 @@ int Tablero::calcHeuristicaVehiculos() const{
         int cont = 0;
         unordered_map<Vehiculo*,Vehiculo*> table;//tan sólo necesitamos comprobar que no se repitan punteros (también se podrían obtener las letras)
         //Se podrá reducir la duplicación de código entre estos dos bloques?
-        if(pos1.first == pos2.first){//vertical
-            int end = std::max(pos1.second, pos2.second);
-            for(int i = std::min(pos1.second, pos2.second); i < end; i++){
-                if(table.count(matriz[pos1.first][i]) == 0){
-                    cont++;
-                    table.insert({matriz[pos1.first][i],matriz[pos1.first][i]});
-                }
+        int posicion1A = pos1.first, posicion1B = pos1.second, posicion2 = pos2.first;
+
+        if(pos1.first == pos2.first){
+            posicion1A = pos1.second, posicion1B = pos1.first, posicion2 = pos2.second;
+        }
+
+        int end = std::max(posicion1A, posicion2);
+        for(int i = std::min(posicion1A, posicion2); i < end; i++){
+            if(table.count(matriz[posicion1B][i]) == 0){
+                cont++;
+                table.insert({matriz[posicion1B][i],matriz[posicion1B][i]});
             }
-        }else{//horizontal
-            int end = std::max(pos1.first, pos2.first);
-            for(int i = std::min(pos1.first, pos2.first); i < end; i++){
-                if(table.count(matriz[i][pos1.second]) == 0){
-                    cont++;
-                    table.insert({matriz[i][pos1.second],matriz[i][pos1.second]});
-                }
-            }            
         }
         return cont;
     };
