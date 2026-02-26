@@ -93,7 +93,7 @@ void Tablero::mostrarMatriz(){
             if(C == 'X')
                 cout << "\e[38;2;0;0;0;48;2;255;255;255m";
             else if(C == 'Z')
-                cout << "\e[38;2;0;0;0;48;2;0;210;0m";
+                cout << "\e[38;2;0;0;0;48;2;0;255;255m";
             else{
                 int colorBase = (C-65)*14;
                 cout << "\e[38:2::" << colorBase%256 << ':' << (colorBase+160)%256 << ':' << (colorBase+80)%256 << 'm';
