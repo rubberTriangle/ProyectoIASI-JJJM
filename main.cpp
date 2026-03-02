@@ -22,6 +22,21 @@ int main()
     }
     int hSelecIndex = std::stoi(heuristicaSeleccionada);
 
+    string resolucion[2] = {"Distancia Manhattan simple", "Distancia Manhattan por vehículos"};
+    string resolucionSeleccionada;
+
+    cout << "Elige el método de resolución a utilizar: (Presiona Enter para valor predeterminado)" << endl;
+    for(int i = 0; i < 2; i++){
+        cout << "[" << i << "] " << resolucion[i] << endl;
+    }
+
+    getline(std::cin, resolucionSeleccionada);
+
+    if (resolucionSeleccionada.empty()) {
+        resolucionSeleccionada = "0";
+    }
+    int sSelecIndex = std::stoi(resolucionSeleccionada);
+
     Tablero tablero;
     cout << "Matriz cargada:\n";
     tablero.mostrarMatriz();
