@@ -10,6 +10,7 @@ jugar::jugar() {
     case 1:
         break;
     case 2:
+        this->metodoEscaladaSimple();
         break;
     default:
         cout << "El método seleccionado no está disponible" << endl;
@@ -55,30 +56,33 @@ vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
 {
     vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
 
-    movimientosPosibles = tableroInicial.movimientosPosibles();
-    Tablero* auxiliar;
+    if(!this->tableroInicial.comprobarFin()){
+        movimientosPosibles = tableroInicial.movimientosPosibles();
+        Tablero* auxiliar;
 
-    int mejorH = INT_MAX;
+        int mejorH = INT_MAX;
 
-    for (int i = 0; i < movimientosPosibles.size(); i++) {
-        cout << "Posible movimiento " << i+1 << ':' << endl;
-        auxiliar = new Tablero(tableroInicial);
-        //traducción de movimiento en tablero original a tablero nuevo
-        movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
-        cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
-        auxiliar->realizarMovimiento(movimientosPosibles[i]);
+        for (int i = 0; i < movimientosPosibles.size(); i++) {
+            cout << "Posible movimiento " << i+1 << ':' << endl;
+            auxiliar = new Tablero(tableroInicial);
+            //traducción de movimiento en tablero original a tablero nuevo
+            movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
+            cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
+            auxiliar->realizarMovimiento(movimientosPosibles[i]);
 
-        int h = calcularHeuristica(auxiliar);
+            int h = calcularHeuristica(auxiliar);
 
-        if (h < mejorH) {
-            mejorH = h;
+            if (h < mejorH) {
+                mejorH = h;
+            }
+            cout << " - h' = " << h << endl;;
+            auxiliar->mostrarMatriz();
+            delete auxiliar;
+            cout << endl;
         }
-        cout << " - h' = " << h << endl;;
-        auxiliar->mostrarMatriz();
-        delete auxiliar;
-        cout << endl;
+        cout << " - Mejor heurística es: " << mejorH;
     }
-    cout << " - Mejor heurística es: " << mejorH;
+
     return movimientosPosibles;
 }
 

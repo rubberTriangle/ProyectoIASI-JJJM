@@ -105,6 +105,16 @@ void Tablero::mostrarMatriz(){
     }
 }
 
+bool Tablero::comprobarFin()
+{
+    if(posZ.first == 0 || posZ.first == ancho - 1 || posZ.second == 0 || posZ.second == alto - 1 ){
+        cout << "Has llegado a la meta" << endl;
+        return true;
+    }
+
+    return false;
+}
+
 int Tablero::calcHeuristicaSimple() const{
     int hX, hZ;
 
