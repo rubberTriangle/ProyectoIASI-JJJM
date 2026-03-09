@@ -68,15 +68,7 @@ vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
 
-        int h;
-        switch(hSelecIndex){
-        case 0:
-            h = auxiliar->calcHeuristicaSimple();
-            break;
-        case 1:
-            h = auxiliar->calcHeuristicaVehiculos();
-            break;
-        }
+        int h = calcularHeuristica(auxiliar);
 
         if (h < mejorH) {
             mejorH = h;
@@ -90,7 +82,27 @@ vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
     return movimientosPosibles;
 }
 
+int jugar::calcularHeuristica(Tablero *t)
+{
+    int h;
+    switch(hSelecIndex){
+    case 0:
+        h = t->calcHeuristicaSimple();
+        break;
+    case 1:
+        h = t->calcHeuristicaVehiculos();
+        break;
+    }
+
+    return h;
+}
+
 void jugar::metodoIDA()
 {
     vector<pair<Vehiculo*, Tablero::direccion>>movimientosPosibles = this->mostrarMovimientos();
+}
+
+void jugar::metodoEscaladaSimple()
+{
+
 }

@@ -20,7 +20,9 @@ public:
     void elegirHeuristica();
     void elegirMetodo();
     vector<pair<Vehiculo*, Tablero::direccion>> mostrarMovimientos();
+    int calcularHeuristica(Tablero *t);
     void metodoIDA();
+    void metodoEscaladaSimple();
 };
 
 #endif // JUGAR_H
