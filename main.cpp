@@ -8,8 +8,6 @@ using namespace std;
 
 int main() {
     jugar jugar;
-    jugar.elegirHeuristica ();
-    jugar.elegirMetodo ();
 
     return 0;
 }

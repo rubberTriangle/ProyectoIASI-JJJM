@@ -1,6 +1,22 @@
 #include "jugar.h"
 
-jugar::jugar() {}
+jugar::jugar() {
+    this->elegirHeuristica();
+    this->elegirMetodo();
+    switch(stoi(this->resolucionSeleccionada)){
+    case 0:
+        this->metodoIDA();
+        break;
+    case 1:
+        break;
+    case 2:
+        break;
+    default:
+        cout << "El método seleccionado no está disponible" << endl;
+    }
+
+    this->mostrarMovimientos();
+}
 
 void jugar::elegirHeuristica () {
     cout << "Elige la heurística a utilizar: (Presiona Enter para valor predeterminado)" << endl;
@@ -30,20 +46,23 @@ void jugar::elegirMetodo () {
     }
     sSelecIndex = std::stoi(resolucionSeleccionada);
 
-    Tablero tablero;
     cout << "Matriz cargada:\n";
-    tablero.mostrarMatriz();
+    tableroInicial.mostrarMatriz();
     cout << endl;
+}
+
+void jugar::mostrarMovimientos()
+{
     vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
 
-    movimientosPosibles = tablero.movimientosPosibles();
+    movimientosPosibles = tableroInicial.movimientosPosibles();
     Tablero* auxiliar;
 
     int mejorH = INT_MAX;
 
     for (int i = 0; i < movimientosPosibles.size(); i++) {
         cout << "Posible movimiento " << i+1 << ':' << endl;
-        auxiliar = new Tablero(tablero);
+        auxiliar = new Tablero(tableroInicial);
         //traducción de movimiento en tablero original a tablero nuevo
         movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
@@ -68,4 +87,9 @@ void jugar::elegirMetodo () {
         cout << endl;
     }
     cout << " - Mejor heurística es: " << mejorH;
+}
+
+void jugar::metodoIDA()
+{
+    this->mostrarMovimientos();
 }
