@@ -35,7 +35,7 @@ void jugar::elegirHeuristica () {
 void jugar::elegirMetodo () {
 
     cout << "Elige el método de resolución a utilizar: (Presiona Enter para valor predeterminado)" << endl;
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 3; i++){
         cout << "[" << i << "] " << resolucion[i] << endl;
     }
 
@@ -87,6 +87,7 @@ vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
         cout << endl;
     }
     cout << " - Mejor heurística es: " << mejorH;
+    return movimientosPosibles;
 }
 
 void jugar::metodoIDA()
