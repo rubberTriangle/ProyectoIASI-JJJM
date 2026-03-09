@@ -51,7 +51,7 @@ void jugar::elegirMetodo () {
     cout << endl;
 }
 
-void jugar::mostrarMovimientos()
+vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
 {
     vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
 
@@ -91,5 +91,5 @@ void jugar::mostrarMovimientos()
 
 void jugar::metodoIDA()
 {
-    this->mostrarMovimientos();
+    vector<pair<Vehiculo*, Tablero::direccion>>movimientosPosibles = this->mostrarMovimientos();
 }

@@ -19,7 +19,7 @@ public:
     jugar();
     void elegirHeuristica();
     void elegirMetodo();
-    void mostrarMovimientos();
+    vector<pair<Vehiculo*, Tablero::direccion>> mostrarMovimientos();
     void metodoIDA();
 };
 
