@@ -79,7 +79,7 @@ void jugar::mostrarMovimientos(int &indice, int &heuristica)
             delete auxiliar;
             cout << endl;
         }
-        cout << " - Mejor heurística es: " << heuristica;
+        cout << " - Mejor heurística es: " << heuristica << endl;
     }
 }
 
