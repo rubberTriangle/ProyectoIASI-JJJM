@@ -15,8 +15,6 @@ jugar::jugar() {
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
-
-    this->mostrarMovimientos();
 }
 
 void jugar::elegirHeuristica () {
@@ -52,15 +50,15 @@ void jugar::elegirMetodo () {
     cout << endl;
 }
 
-vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
+void jugar::mostrarMovimientos(int &indice, int &heuristica)
 {
-    vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
+    indice = 0;
 
     if(!this->tableroInicial.comprobarFin()){
         movimientosPosibles = tableroInicial.movimientosPosibles();
         Tablero* auxiliar;
 
-        int mejorH = INT_MAX;
+        heuristica = INT_MAX;
 
         for (int i = 0; i < movimientosPosibles.size(); i++) {
             cout << "Posible movimiento " << i+1 << ':' << endl;
@@ -72,18 +70,17 @@ vector<pair<Vehiculo*, Tablero::direccion>> jugar::mostrarMovimientos()
 
             int h = calcularHeuristica(auxiliar);
 
-            if (h < mejorH) {
-                mejorH = h;
+            if (h < heuristica) {
+                heuristica = h;
+                indice = i;
             }
             cout << " - h' = " << h << endl;;
             auxiliar->mostrarMatriz();
             delete auxiliar;
             cout << endl;
         }
-        cout << " - Mejor heurística es: " << mejorH;
+        cout << " - Mejor heurística es: " << heuristica;
     }
-
-    return movimientosPosibles;
 }
 
 int jugar::calcularHeuristica(Tablero *t)
@@ -103,10 +100,18 @@ int jugar::calcularHeuristica(Tablero *t)
 
 void jugar::metodoIDA()
 {
-    vector<pair<Vehiculo*, Tablero::direccion>>movimientosPosibles = this->mostrarMovimientos();
+    int i, h;
+    this->mostrarMovimientos(i, h);
 }
 
 void jugar::metodoEscaladaSimple()
 {
+    int i, h;
+    while(true){
+        this->mostrarMovimientos(i, h);
 
+        Tablero* aux = new Tablero(tableroInicial);
+        aux->realizarMovimiento(this->movimientosPosibles[i]);
+        this->tableroInicial = *aux;
+    }
 }

@@ -15,11 +15,13 @@ private:
     string resolucion[3] = {"IDA", "A*", "Escalada simple"};
     string resolucionSeleccionada;
 
+    vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
+
 public:
     jugar();
     void elegirHeuristica();
     void elegirMetodo();
-    vector<pair<Vehiculo*, Tablero::direccion>> mostrarMovimientos();
+    void mostrarMovimientos(int &i, int &h);
     int calcularHeuristica(Tablero *t);
     void metodoIDA();
     void metodoEscaladaSimple();
