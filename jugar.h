@@ -25,6 +25,8 @@ public:
     int calcularHeuristica(Tablero *t);
     void metodoIDA();
     void metodoEscaladaSimple();
+    void metodoEscaladaSimpleEstocastica();
+    void metodoBusquedaPrimeroMejorAC();
 };
 
 #endif // JUGAR_H

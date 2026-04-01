@@ -115,3 +115,31 @@ void jugar::metodoEscaladaSimple()
         this->tableroInicial = *aux;
     }
 }
+
+void jugar::metodoEscaladaSimpleEstocastica()
+{
+    int alfa, h;
+    queue cola = new queue();
+    struct nodo {
+        int id;
+        int idPadre;
+        int coste;
+    };
+    cout << "Introducir valor de alfa (Pulsar enter para valor predeterminado" << endl;
+    getline(std::cin, alfa);
+    if (alfa.empty()) {
+        alfa = 3;
+    }
+    cout << "Alfa = " << alfa << endl;
+}
+
+void jugar::metodoBusquedaPrimeroMejorAC()
+{
+    priority_queue abiertos = new priority_queue ();
+    queue cerrados  = new queue ();
+    struct nodo {
+        int id;
+        int idPadre;
+        int coste;
+    };
+}
