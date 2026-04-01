@@ -9,7 +9,9 @@ add_executable(ProyectoIASI main.cpp
     ficheros/HORAPUNTA1.txt ficheros/HORAPUNTA2.txt ficheros/HORAPUNTA3.txt ficheros/HORAPUNTA4.txt ficheros/HORAPUNTA5.txt
     Tablero.h Tablero.cpp
     vehiculo.h vehiculo.cpp
-    jugar.h jugar.cpp )
+    jugar.h jugar.cpp
+    escaladasimpleestocastica.h escaladasimpleestocastica.cpp
+    busquedaprimeromejorac.h busquedaprimeromejorac.cpp )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ficheros DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
