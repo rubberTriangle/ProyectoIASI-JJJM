@@ -1,6 +1,7 @@
 #include "jugar.h"
 
 jugar::jugar() {
+    alfa = 3;
     this->elegirHeuristica();
     this->elegirMetodo();
     switch(stoi(this->resolucionSeleccionada)){
@@ -12,6 +13,11 @@ jugar::jugar() {
     case 2:
         this->metodoEscaladaSimple();
         break;
+    case 3:
+        this->metodoEscaladaSimpleEstocastica();
+        break;
+    case 4:
+        this->metodoBusquedaPrimeroMejorAC();
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
@@ -34,7 +40,7 @@ void jugar::elegirHeuristica () {
 void jugar::elegirMetodo () {
 
     cout << "Elige el método de resolución a utilizar: (Presiona Enter para valor predeterminado)" << endl;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 5; i++){
         cout << "[" << i << "] " << resolucion[i] << endl;
     }
 
@@ -83,6 +89,41 @@ void jugar::mostrarMovimientos(int &indice, int &heuristica)
     }
 }
 
+bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
+{
+    bool encontrado = false;
+    int i = 0;
+
+    if(!this->tableroInicial.comprobarFin()){
+        movimientosPosibles = tableroInicial.movimientosPosibles();
+
+        while (i < movimientosPosibles.size() && !encontrado) {
+
+            Tablero *auxiliar = new Tablero(tableroInicial);
+            //traducción de movimiento en tablero original a tablero nuevo
+            movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
+            auxiliar->realizarMovimiento(movimientosPosibles[i]);
+
+            int h = calcularHeuristica(auxiliar);
+
+            if (h < heuristica && (h + stoi(alfa)) <= heuristica) {
+                encontrado = true;
+                heuristica = h;
+                indice = i;
+                cout << " - h' = " << h << endl;;
+                auxiliar->mostrarMatriz();
+                cout << endl;
+            }
+            delete auxiliar;
+            i++;
+        }
+        if (!encontrado) {
+            cout << "No tiene solución utilizando el método de escalada simple estocástica" << endl;
+        }
+    }
+    return encontrado;
+}
+
 int jugar::calcularHeuristica(Tablero *t)
 {
     int h;
@@ -118,28 +159,42 @@ void jugar::metodoEscaladaSimple()
 
 void jugar::metodoEscaladaSimpleEstocastica()
 {
-    int alfa, h;
-    queue cola = new queue();
-    struct nodo {
-        int id;
-        int idPadre;
-        int coste;
-    };
     cout << "Introducir valor de alfa (Pulsar enter para valor predeterminado" << endl;
     getline(std::cin, alfa);
     if (alfa.empty()) {
-        alfa = 3;
+        alfa = "3";
     }
     cout << "Alfa = " << alfa << endl;
+
+    int h = INT_MAX;
+
+    while (true) {
+
+        int i = 0;
+        if (this->mostrarUnMovimientoEstocastica(i, h)) {
+            vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
+            this->tableroInicial.realizarMovimiento(mov[i]);
+
+            if(tableroInicial.comprobarFin()) {
+                cout << "¡Objetivo alcanzado!" << endl;
+            break;
+            }
+        }
+        else {
+        // Si no hay más movimientos posibles, salimos del bucle
+            break;
+        }
+    }
 }
 
 void jugar::metodoBusquedaPrimeroMejorAC()
 {
-    priority_queue abiertos = new priority_queue ();
-    queue cerrados  = new queue ();
+    //priority_queue abiertos = new priority_queue ();
+    //queue cerrados  = new queue ();
     struct nodo {
         int id;
         int idPadre;
         int coste;
     };
+
 }
