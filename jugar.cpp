@@ -2,6 +2,7 @@
 
 jugar::jugar() {
     alfa = 3;
+    cont = 0;
     this->elegirHeuristica();
     this->elegirMetodo();
     switch(stoi(this->resolucionSeleccionada)){
@@ -124,6 +125,65 @@ bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
     return encontrado;
 }
 
+void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <nodo> &abiertos, queue <nodo> &cerrados)
+{
+    if(!this->tableroInicial.comprobarFin()){
+        movimientosPosibles = tableroInicial.movimientosPosibles();
+
+        for (int i = 0; i < movimientosPosibles.size(); i++) {
+            Tablero *auxiliar;
+            cout << "Posible movimiento " << i+1 << ':' << endl;
+            auxiliar = new Tablero(tableroInicial);
+            //traducción de movimiento en tablero original a tablero nuevo
+            movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
+            auxiliar->realizarMovimiento(movimientosPosibles[i]);
+
+            int h = calcularHeuristica(auxiliar);
+
+            nodo hijo;
+            hijo.id = cont++;
+            hijo.idPadre = indice;
+            hijo.coste = h;
+
+            if (!existeEnCerrados(cerrados, hijo.matrizTablero)) {
+                abiertos.push(hijo);
+            }
+            delete auxiliar;
+        }
+
+    }
+}
+
+bool jugar::existeEnCerrados(queue<nodo> cerrados, const vector<vector<Vehiculo*>>& matrizActual) {
+    while (!cerrados.empty()) {
+        if (cerrados.front().matrizTablero == matrizActual) {
+            return true;
+        }
+        cerrados.pop();
+    }
+    return false;
+}
+
+void jugar::mostrarAbiertos(priority_queue<nodo> abiertos) {
+    cout << "\n=== LISTA ABIERTOS ===" << endl;
+
+    while (!abiertos.empty()) {
+        nodo n = abiertos.top();
+        cout << n.id << " " << n.idPadre << " " << n.coste << endl;
+        abiertos.pop();
+    }
+}
+
+void jugar::mostrarCerrados(queue <nodo> cerrados) {
+    cout << "\n=== LISTA CERRADOS ===" << endl;
+
+    while (!cerrados.empty()) {
+        nodo n = cerrados.front();
+        cout << n.id << " " << n.idPadre << endl;
+        cerrados.pop();
+    }
+}
+
 int jugar::calcularHeuristica(Tablero *t)
 {
     int h;
@@ -189,12 +249,44 @@ void jugar::metodoEscaladaSimpleEstocastica()
 
 void jugar::metodoBusquedaPrimeroMejorAC()
 {
-    //priority_queue abiertos = new priority_queue ();
-    //queue cerrados  = new queue ();
-    struct nodo {
-        int id;
-        int idPadre;
-        int coste;
-    };
+    priority_queue <nodo> abiertos;
+    queue <nodo> cerrados;
+    int h = 0;
 
+    nodo inicial = {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial.matriz};
+    abiertos.push(inicial);
+
+    while (!abiertos.empty()) {
+        nodo actual = abiertos.top();
+        abiertos.pop();
+
+        if (existeEnCerrados(cerrados, actual.matrizTablero)) {
+            continue;
+        }
+
+        this->tableroInicial.matriz = actual.matrizTablero;
+
+        if(this->tableroInicial.comprobarFin()) {
+            cout << "¡Objetivo alcanzado!" << endl;
+            break;
+        }
+
+        cerrados.push(actual);
+
+        vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
+        for (pair<Vehiculo*, Tablero::direccion> m : mov) {
+            Tablero auxiliar = tableroInicial;
+            auxiliar.realizarMovimiento(m);
+
+            nodo hijo;
+            hijo.id = cont++;
+            hijo.idPadre = actual.id;
+            hijo.matrizTablero = auxiliar.matriz;
+            hijo.coste = calcularHeuristica(&auxiliar);
+
+            if (!existeEnCerrados(cerrados, hijo.matrizTablero)) {
+                abiertos.push(hijo);
+            }
+        }
+    }
 }

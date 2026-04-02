@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <climits>
+#include <queue>
 #include "Tablero.h"
 
 class jugar {
@@ -16,8 +17,19 @@ private:
     string resolucionSeleccionada;
 
     string alfa;
+    int cont;
 
     vector<pair<Vehiculo*, Tablero::direccion>> movimientosPosibles;
+    struct nodo {
+        int id;
+        int idPadre;
+        int coste;
+        vector<vector<Vehiculo*>> matrizTablero;
+
+        bool operator<(const nodo& otra) const {
+            return coste > otra.coste;
+        }
+    };
 
 public:
     jugar();
@@ -25,6 +37,10 @@ public:
     void elegirMetodo();
     void mostrarMovimientos(int &i, int &h);
     bool mostrarUnMovimientoEstocastica(int &i, int &h);
+    void mostrarMovimientosAC(int &i, int &h, priority_queue <nodo> &abiertos, queue <nodo> &cerrados);
+    bool existeEnCerrados(queue<nodo> cerrados, const vector<vector<Vehiculo*>>& matrizActual);
+    void mostrarAbiertos(priority_queue<nodo> abiertos);
+    void mostrarCerrados(queue <nodo> cerrados);
     int calcularHeuristica(Tablero *t);
     void metodoIDA();
     void metodoEscaladaSimple();
