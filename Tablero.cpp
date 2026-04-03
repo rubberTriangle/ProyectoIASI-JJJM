@@ -184,13 +184,13 @@ vector<pair<Vehiculo*, Tablero::direccion>> Tablero::movimientosPosibles(){
         }
     }
 
-    if(posX.second > 0){ // Abajo
+    if(posX.second < alto - 1){ // Abajo
         if(matriz[posX.first][posX.second+1]->vertical){
             sol.push_back(pair(matriz[posX.first][posX.second+1], ABAJO));
         }
     }
 
-    if(posX.first < alto - 1){ // Arriba
+    if(posX.second > 0){ // Arriba
         if(matriz[posX.first][posX.second-1]->vertical){
             sol.push_back(pair(matriz[posX.first][posX.second-1], ARRIBA));
         }
