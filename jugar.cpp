@@ -59,9 +59,8 @@ void jugar::elegirMetodo () {
 
 void jugar::mostrarMovimientos(int &indice, int &heuristica)
 {
-    indice = 0;
-
     if(!this->tableroInicial.comprobarFin()){
+        indice = 0;
         movimientosPosibles = tableroInicial.movimientosPosibles();
         Tablero* auxiliar;
 
@@ -207,13 +206,22 @@ void jugar::metodoIDA()
 
 void jugar::metodoEscaladaSimple()
 {
-    int i, h;
-    while(true){
-        this->mostrarMovimientos(i, h);
+    int i = 0;
+    int h_siguiente;
 
-        Tablero* aux = new Tablero(tableroInicial);
-        aux->realizarMovimiento(this->movimientosPosibles[i]);
-        this->tableroInicial = *aux;
+    int h_actual = calcularHeuristica(&tableroInicial);
+
+    while(!tableroInicial.comprobarFin()){
+        this->mostrarMovimientos(i, h_siguiente);
+
+        if (h_siguiente >= h_actual) {
+            cout << "\n¡Atascado en un óptimo local! No hay movimientos que mejoren la heurística." << endl;
+            break;
+        }
+
+        h_actual = h_siguiente;
+
+        this->tableroInicial.realizarMovimiento(this->tableroInicial.movimientosPosibles()[i]);
     }
 }
 
