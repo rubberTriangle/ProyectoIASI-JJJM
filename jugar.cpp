@@ -124,7 +124,7 @@ bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
     return encontrado;
 }
 
-void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <nodo> &abiertos, queue <nodo> &cerrados)
+void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <nodo*, vector <nodo*>, CompararNodos> &abiertos, queue <nodo*> &cerrados)
 {
     if(!this->tableroInicial.comprobarFin()){
         movimientosPosibles = tableroInicial.movimientosPosibles();
@@ -139,23 +139,28 @@ void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <
 
             int h = calcularHeuristica(auxiliar);
 
-            nodo hijo;
-            hijo.id = cont++;
-            hijo.idPadre = indice;
-            hijo.coste = h;
+            nodo* hijo = new nodo();
+            hijo->id = cont++;
+            hijo->idPadre = indice;
+            hijo->coste = h;
+            hijo->matrizTablero = auxiliar->matriz;
 
-            if (!existeEnCerrados(cerrados, hijo.matrizTablero)) {
+            if (!existeEnCerrados(cerrados, hijo->matrizTablero)) {
                 abiertos.push(hijo);
             }
-            delete auxiliar;
+            else {
+                delete hijo;
+            }
         }
 
     }
 }
 
-bool jugar::existeEnCerrados(queue<nodo> cerrados, const vector<vector<Vehiculo*>>& matrizActual) {
+
+
+bool jugar::existeEnCerrados(queue<nodo*> cerrados, const vector<vector<Vehiculo*>>& matrizActual) {
     while (!cerrados.empty()) {
-        if (cerrados.front().matrizTablero == matrizActual) {
+        if (cerrados.front()->matrizTablero == matrizActual) {
             return true;
         }
         cerrados.pop();
@@ -163,22 +168,22 @@ bool jugar::existeEnCerrados(queue<nodo> cerrados, const vector<vector<Vehiculo*
     return false;
 }
 
-void jugar::mostrarAbiertos(priority_queue<nodo> abiertos) {
+void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos) {
     cout << "\n=== LISTA ABIERTOS ===" << endl;
 
     while (!abiertos.empty()) {
-        nodo n = abiertos.top();
-        cout << n.id << " " << n.idPadre << " " << n.coste << endl;
+        nodo *n = abiertos.top();
+        cout << n->id << " " << n->idPadre << " " << n->coste << endl;
         abiertos.pop();
     }
 }
 
-void jugar::mostrarCerrados(queue <nodo> cerrados) {
+void jugar::mostrarCerrados(queue <nodo*> cerrados) {
     cout << "\n=== LISTA CERRADOS ===" << endl;
 
     while (!cerrados.empty()) {
-        nodo n = cerrados.front();
-        cout << n.id << " " << n.idPadre << endl;
+        nodo *n = cerrados.front();
+        cout << n->id << " " << n->idPadre << endl;
         cerrados.pop();
     }
 }
@@ -249,7 +254,6 @@ void jugar::metodoEscaladaSimpleEstocastica()
             }
         }
         else {
-        // Si no hay más movimientos posibles, salimos del bucle
             break;
         }
     }
@@ -257,24 +261,25 @@ void jugar::metodoEscaladaSimpleEstocastica()
 
 void jugar::metodoBusquedaPrimeroMejorAC()
 {
-    priority_queue <nodo> abiertos;
-    queue <nodo> cerrados;
+    priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
+    queue <nodo*> cerrados;
     int h = 0;
 
-    nodo inicial = {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial.matriz};
+    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial.matriz};
     abiertos.push(inicial);
 
     while (!abiertos.empty()) {
-        nodo actual = abiertos.top();
+        nodo *actual = abiertos.top();
         abiertos.pop();
 
-        if (existeEnCerrados(cerrados, actual.matrizTablero)) {
+        if (existeEnCerrados(cerrados, actual->matrizTablero)) {
             continue;
         }
 
-        this->tableroInicial.matriz = actual.matrizTablero;
+        this->tableroInicial.matriz = actual->matrizTablero;
 
         if(this->tableroInicial.comprobarFin()) {
+            cerrados.push(actual);
             cout << "¡Objetivo alcanzado!" << endl;
             break;
         }
@@ -286,15 +291,24 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             Tablero auxiliar = tableroInicial;
             auxiliar.realizarMovimiento(m);
 
-            nodo hijo;
-            hijo.id = cont++;
-            hijo.idPadre = actual.id;
-            hijo.matrizTablero = auxiliar.matriz;
-            hijo.coste = calcularHeuristica(&auxiliar);
-
-            if (!existeEnCerrados(cerrados, hijo.matrizTablero)) {
+            if (!existeEnCerrados(cerrados, auxiliar.matriz)) {
+                nodo *hijo = new nodo();
+                hijo->id = cont++;
+                hijo->idPadre = actual->id;
+                hijo->matrizTablero = auxiliar.matriz;
+                hijo->coste = calcularHeuristica(&auxiliar);
                 abiertos.push(hijo);
             }
         }
+    }
+    while (!abiertos.empty()) {
+        nodo *n = abiertos.top();
+        delete n;
+        abiertos.pop();
+    }
+    while (!cerrados.empty()) {
+        nodo *n = cerrados.front();
+        delete n;
+        cerrados.pop();
     }
 }
