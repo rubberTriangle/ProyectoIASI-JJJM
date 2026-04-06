@@ -31,7 +31,8 @@ public:
     bool comprobarFin();
     int calcHeuristicaSimple() const;
     int calcHeuristicaVehiculos() const;
-    
+    bool operator==(const Tablero& otro) const;
+
     ~Tablero();
 };
 

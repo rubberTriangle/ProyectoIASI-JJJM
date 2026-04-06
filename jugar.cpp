@@ -143,14 +143,15 @@ void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <
             hijo->id = cont++;
             hijo->idPadre = indice;
             hijo->coste = h;
-            hijo->matrizTablero = auxiliar->matriz;
+            hijo->tab = *auxiliar;
 
-            if (!existeEnCerrados(cerrados, hijo->matrizTablero)) {
+            if (!existeEnCerrados(cerrados, hijo->tab)) {
                 abiertos.push(hijo);
             }
             else {
                 delete hijo;
             }
+            delete auxiliar;
         }
 
     }
@@ -158,9 +159,9 @@ void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <
 
 
 
-bool jugar::existeEnCerrados(queue<nodo*> cerrados, const vector<vector<Vehiculo*>>& matrizActual) {
+bool jugar::existeEnCerrados(queue<nodo*> cerrados, Tablero tabActual) {
     while (!cerrados.empty()) {
-        if (cerrados.front()->matrizTablero == matrizActual) {
+        if (cerrados.front()->tab == tabActual) {
             return true;
         }
         cerrados.pop();
@@ -265,18 +266,18 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     queue <nodo*> cerrados;
     int h = 0;
 
-    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial.matriz};
+    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial};
     abiertos.push(inicial);
 
     while (!abiertos.empty()) {
         nodo *actual = abiertos.top();
         abiertos.pop();
 
-        if (existeEnCerrados(cerrados, actual->matrizTablero)) {
+        if (existeEnCerrados(cerrados, actual->tab)) {
             continue;
         }
 
-        this->tableroInicial.matriz = actual->matrizTablero;
+        this->tableroInicial = actual->tab;
 
         if(this->tableroInicial.comprobarFin()) {
             cerrados.push(actual);
@@ -291,11 +292,11 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             Tablero auxiliar = tableroInicial;
             auxiliar.realizarMovimiento(m);
 
-            if (!existeEnCerrados(cerrados, auxiliar.matriz)) {
+            if (!existeEnCerrados(cerrados, auxiliar)) {
                 nodo *hijo = new nodo();
                 hijo->id = cont++;
                 hijo->idPadre = actual->id;
-                hijo->matrizTablero = auxiliar.matriz;
+                hijo->tab = auxiliar;
                 hijo->coste = calcularHeuristica(&auxiliar);
                 abiertos.push(hijo);
             }
