@@ -1,5 +1,4 @@
 #include <iostream>
-#include <climits>
 
 #include "Tablero.h"
 #include "jugar.h"
