@@ -32,11 +32,13 @@ private:
         }
     };
 
+    int busquedaIDA(Tablero &tableroActual, int g, int umbral);
+
 public:
     jugar();
     void elegirHeuristica();
     void elegirMetodo();
-    void mostrarMovimientos(int &i, int &h);
+    void mostrarMovimientos(Tablero &t, int &i, int &h);
     bool mostrarUnMovimientoEstocastica(int &i, int &h);
     void mostrarMovimientosAC(int &i, int &h, priority_queue <nodo*, vector <nodo*>, CompararNodos> &abiertos, queue <nodo*> &cerrados);
     bool existeEnCerrados(queue<nodo*> cerrados, Tablero tabActual);

@@ -57,18 +57,18 @@ void jugar::elegirMetodo () {
     cout << endl;
 }
 
-void jugar::mostrarMovimientos(int &indice, int &heuristica)
+void jugar::mostrarMovimientos(Tablero &t, int &indice, int &heuristica)
 {
     if(!this->tableroInicial.comprobarFin()){
         indice = 0;
-        movimientosPosibles = tableroInicial.movimientosPosibles();
+        movimientosPosibles = t.movimientosPosibles();
         Tablero* auxiliar;
 
         heuristica = INT_MAX;
 
         for (int i = 0; i < movimientosPosibles.size(); i++) {
             cout << "Posible movimiento " << i+1 << ':' << endl;
-            auxiliar = new Tablero(tableroInicial);
+            auxiliar = new Tablero(t);
             //traducción de movimiento en tablero original a tablero nuevo
             movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
             cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
@@ -206,8 +206,59 @@ int jugar::calcularHeuristica(Tablero *t)
 
 void jugar::metodoIDA()
 {
-    int i, h;
-    this->mostrarMovimientos(i, h);
+    int umbral = calcularHeuristica(&tableroInicial);
+
+    while(true){
+        int temp = busquedaIDA(tableroInicial, 0, umbral);
+
+        if(temp == -1){
+            break;
+        }else if(temp == INT_MAX){
+            cout << "\nNo se ha encontrado solucion." << endl;
+        }else{
+            umbral = temp;
+        }
+    }
+}
+
+int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
+{
+    int f = g + calcularHeuristica(&tableroActual);
+
+    if(f > umbral){
+        return f;
+    }
+
+    if(tableroActual.comprobarFin()){
+        tableroActual.mostrarMatriz();
+        return -1;
+    }else{
+        int minimo = INT_MAX;
+
+        vector<pair<Vehiculo*, Tablero::direccion>> mov = tableroActual.movimientosPosibles();
+
+        for(pair<Vehiculo*, Tablero::direccion> m : mov){
+            Tablero auxiliar = tableroActual;
+
+            m.first = auxiliar.matriz[m.first->partes.front().first][m.first->partes.front().second];
+
+            auxiliar.realizarMovimiento(m);
+
+            int temp = busquedaIDA(auxiliar, g + 1, umbral);
+
+            if(temp == -1){
+                cout << "\nPaso en profundidad " << g + 1 << ", Vehiculo movido: '" << m.first->letra << "'" << endl;
+                auxiliar.mostrarMatriz();
+                return -1;
+            }
+
+            if(temp < minimo){
+                minimo = temp;
+            }
+        }
+
+        return minimo;
+    }
 }
 
 void jugar::metodoEscaladaSimple()
@@ -218,7 +269,7 @@ void jugar::metodoEscaladaSimple()
     int h_actual = calcularHeuristica(&tableroInicial);
 
     while(!tableroInicial.comprobarFin()){
-        this->mostrarMovimientos(i, h_siguiente);
+        this->mostrarMovimientos(this->tableroInicial, i, h_siguiente);
 
         if (h_siguiente >= h_actual) {
             cout << "\n¡Atascado en un óptimo local! No hay movimientos que mejoren la heurística." << endl;
