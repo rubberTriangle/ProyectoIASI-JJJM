@@ -227,6 +227,10 @@ void Tablero::realizarMovimiento(pair<Vehiculo*, Tablero::direccion> v){
         posZ = v.first->partes.front();
 }
 
+bool Tablero::operator==(const Tablero& otro) const {
+    return this->matriz == otro.matriz;
+}
+
 Tablero::~Tablero(){
     for(auto it = vehiculos.begin(); it != vehiculos.end(); it++)
         delete *it;

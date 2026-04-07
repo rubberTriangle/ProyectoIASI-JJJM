@@ -24,10 +24,11 @@ private:
         int id;
         int idPadre;
         int coste;
-        vector<vector<Vehiculo*>> matrizTablero;
-
-        bool operator<(const nodo& otra) const {
-            return coste > otra.coste;
+        Tablero tab;
+    };
+    struct CompararNodos {
+        bool operator()(const nodo* a, const nodo* b) {
+            return a->coste > b->coste;
         }
     };
 
@@ -37,10 +38,10 @@ public:
     void elegirMetodo();
     void mostrarMovimientos(int &i, int &h);
     bool mostrarUnMovimientoEstocastica(int &i, int &h);
-    void mostrarMovimientosAC(int &i, int &h, priority_queue <nodo> &abiertos, queue <nodo> &cerrados);
-    bool existeEnCerrados(queue<nodo> cerrados, const vector<vector<Vehiculo*>>& matrizActual);
-    void mostrarAbiertos(priority_queue<nodo> abiertos);
-    void mostrarCerrados(queue <nodo> cerrados);
+    void mostrarMovimientosAC(int &i, int &h, priority_queue <nodo*, vector <nodo*>, CompararNodos> &abiertos, queue <nodo*> &cerrados);
+    bool existeEnCerrados(queue<nodo*> cerrados, Tablero tabActual);
+    void mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos);
+    void mostrarCerrados(queue <nodo*> cerrados);
     int calcularHeuristica(Tablero *t);
     void metodoIDA();
     void metodoEscaladaSimple();
