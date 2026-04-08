@@ -59,34 +59,31 @@ void jugar::elegirMetodo () {
 
 void jugar::mostrarMovimientos(Tablero &t, int &indice, int &heuristica)
 {
-    if(!this->tableroInicial.comprobarFin()){
-        indice = 0;
-        movimientosPosibles = t.movimientosPosibles();
-        Tablero* auxiliar;
+    indice = 0;
+    movimientosPosibles = t.movimientosPosibles();
 
-        heuristica = INT_MAX;
+    heuristica = INT_MAX;
 
-        for (int i = 0; i < movimientosPosibles.size(); i++) {
-            cout << "Posible movimiento " << i+1 << ':' << endl;
-            auxiliar = new Tablero(t);
-            //traducción de movimiento en tablero original a tablero nuevo
-            movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
-            cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
-            auxiliar->realizarMovimiento(movimientosPosibles[i]);
+    for (int i = 0; i < movimientosPosibles.size(); i++) {
+        cout << "Posible movimiento " << i+1 << ':' << endl;
+        Tablero* auxiliar = new Tablero(t);
+        //traducción de movimiento en tablero original a tablero nuevo
+        movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
+        cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
+        auxiliar->realizarMovimiento(movimientosPosibles[i]);
 
-            int h = calcularHeuristica(auxiliar);
+        int h = calcularHeuristica(auxiliar);
 
-            if (h < heuristica) {
-                heuristica = h;
-                indice = i;
-            }
-            cout << " - h' = " << h << endl;;
-            auxiliar->mostrarMatriz();
-            delete auxiliar;
-            cout << endl;
+        if (h < heuristica) {
+            heuristica = h;
+            indice = i;
         }
-        cout << " - Mejor heurística es: " << heuristica << endl;
+        cout << " - h' = " << h << endl;;
+        auxiliar->mostrarMatriz();
+        delete auxiliar;
+        cout << endl;
     }
+    cout << " - Mejor heurística es: " << heuristica << endl;
 }
 
 bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
@@ -124,47 +121,25 @@ bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
     return encontrado;
 }
 
-void jugar::mostrarMovimientosAC (int &indice, int &heuristica, priority_queue <nodo*, vector <nodo*>, CompararNodos> &abiertos, queue <nodo*> &cerrados)
+void jugar::mostrarMovimientosAC (int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov)
 {
-    if(!this->tableroInicial.comprobarFin()){
-        movimientosPosibles = tableroInicial.movimientosPosibles();
+    cout << "Posible movimiento " << indice << ':' << endl;
+    cout << " - Vehiculo movido: \'" << mov->first->letra << '\'' << endl;
 
-        for (int i = 0; i < movimientosPosibles.size(); i++) {
-            Tablero *auxiliar;
-            cout << "Posible movimiento " << i+1 << ':' << endl;
-            auxiliar = new Tablero(tableroInicial);
-            //traducción de movimiento en tablero original a tablero nuevo
-            movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
-            auxiliar->realizarMovimiento(movimientosPosibles[i]);
+    int h = calcularHeuristica(t);
+    cout << " - h' = " << h << endl;
 
-            int h = calcularHeuristica(auxiliar);
-
-            nodo* hijo = new nodo();
-            hijo->id = cont++;
-            hijo->idPadre = indice;
-            hijo->coste = h;
-            hijo->tab = *auxiliar;
-
-            if (!existeEnCerrados(cerrados, hijo->tab)) {
-                abiertos.push(hijo);
-            }
-            else {
-                delete hijo;
-            }
-            delete auxiliar;
-        }
-
-    }
+    t->mostrarMatriz();
+    cout << endl;
 }
 
 
 
-bool jugar::existeEnCerrados(queue<nodo*> cerrados, Tablero tabActual) {
-    while (!cerrados.empty()) {
-        if (cerrados.front()->tab == tabActual) {
+bool jugar::existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual) {
+    for (nodo* n : cerrados) {
+        if (n->tab == tabActual) {
             return true;
         }
-        cerrados.pop();
     }
     return false;
 }
@@ -176,6 +151,7 @@ void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos>
         nodo *n = abiertos.top();
         cout << n->id << " " << n->idPadre << " " << n->coste << endl;
         abiertos.pop();
+        delete n;
     }
 }
 
@@ -186,12 +162,13 @@ void jugar::mostrarCerrados(queue <nodo*> cerrados) {
         nodo *n = cerrados.front();
         cout << n->id << " " << n->idPadre << endl;
         cerrados.pop();
+        delete n;
     }
 }
 
 int jugar::calcularHeuristica(Tablero *t)
 {
-    int h;
+    int h = 0;
     switch(hSelecIndex){
     case 0:
         h = t->calcHeuristicaSimple();
@@ -231,6 +208,7 @@ int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
 
     if(tableroActual.comprobarFin()){
         tableroActual.mostrarMatriz();
+        cout << "Tablero final encontrado." << endl;
         return -1;
     }else{
         int minimo = INT_MAX;
@@ -314,8 +292,7 @@ void jugar::metodoEscaladaSimpleEstocastica()
 void jugar::metodoBusquedaPrimeroMejorAC()
 {
     priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
-    queue <nodo*> cerrados;
-    int h = 0;
+    vector <nodo*> cerrados;
 
     nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial};
     abiertos.push(inicial);
@@ -325,42 +302,44 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         abiertos.pop();
 
         if (existeEnCerrados(cerrados, actual->tab)) {
+            delete actual;
             continue;
         }
+        cerrados.push_back(actual);
 
-        this->tableroInicial = actual->tab;
+        //cout << "Matriz de partida: " << endl;
+        //actual->tab.mostrarMatriz();
+        //cout << endl;
 
-        if(this->tableroInicial.comprobarFin()) {
-            cerrados.push(actual);
+        if(actual->tab.comprobarFin()) {
             cout << "¡Objetivo alcanzado!" << endl;
             break;
         }
 
-        cerrados.push(actual);
-
-        vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
+        vector<pair<Vehiculo*, Tablero::direccion>> mov = actual->tab.movimientosPosibles();
+        int i = 0;
         for (pair<Vehiculo*, Tablero::direccion> m : mov) {
-            Tablero auxiliar = tableroInicial;
+            Tablero auxiliar = actual->tab;
+            m.first = auxiliar.matriz[m.first->partes.front().first][m.first->partes.front().second];
             auxiliar.realizarMovimiento(m);
 
             if (!existeEnCerrados(cerrados, auxiliar)) {
-                nodo *hijo = new nodo();
-                hijo->id = cont++;
-                hijo->idPadre = actual->id;
-                hijo->tab = auxiliar;
-                hijo->coste = calcularHeuristica(&auxiliar);
+                i++;
+                int hAuxiliar = calcularHeuristica(&auxiliar);
+                //this->mostrarMovimientosAC(i, hAuxiliar, &auxiliar, &m);
+                cont++;
+                nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar);
                 abiertos.push(hijo);
             }
         }
     }
+
     while (!abiertos.empty()) {
         nodo *n = abiertos.top();
         delete n;
         abiertos.pop();
     }
-    while (!cerrados.empty()) {
-        nodo *n = cerrados.front();
+    for (nodo* n : cerrados) {
         delete n;
-        cerrados.pop();
     }
 }

@@ -107,12 +107,7 @@ void Tablero::mostrarMatriz(){
 
 bool Tablero::comprobarFin()
 {
-    if(posZ.first == 0 || posZ.first == ancho - 1 || posZ.second == 0 || posZ.second == alto - 1 ){
-        cout << "Has llegado a la meta" << endl;
-        return true;
-    }
-
-    return false;
+    return (posZ.first == 0 || posZ.first == ancho - 1 || posZ.second == 0 || posZ.second == alto - 1);
 }
 
 int Tablero::calcHeuristicaSimple() const{
@@ -225,10 +220,6 @@ void Tablero::realizarMovimiento(pair<Vehiculo*, Tablero::direccion> v){
     }
     if(v.first->letra == 'Z')
         posZ = v.first->partes.front();
-}
-
-bool Tablero::operator==(const Tablero& otro) const {
-    return this->matriz == otro.matriz;
 }
 
 Tablero::~Tablero(){
