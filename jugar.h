@@ -48,7 +48,7 @@ public:
     void mostrarMovimientosAC(int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov);
     bool existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual);
     void mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos);
-    void mostrarCerrados(queue <nodo*> cerrados);
+    void mostrarCerrados(vector<nodo *> cerrados);
     int calcularHeuristica(Tablero *t);
     void metodoIDA();
     void metodoEscaladaSimple();

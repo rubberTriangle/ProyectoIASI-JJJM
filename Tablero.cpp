@@ -102,6 +102,8 @@ void Tablero::mostrarMatriz(){
             cout << C << "\e[0m" << " ";
         }
         cout << endl;
+
+        cout << std::flush;
     }
 }
 

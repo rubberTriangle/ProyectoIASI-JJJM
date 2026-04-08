@@ -155,13 +155,11 @@ void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos>
     }
 }
 
-void jugar::mostrarCerrados(queue <nodo*> cerrados) {
+void jugar::mostrarCerrados(vector <nodo*> cerrados) {
     cout << "\n=== LISTA CERRADOS ===" << endl;
 
-    while (!cerrados.empty()) {
-        nodo *n = cerrados.front();
-        cout << n->id << " " << n->idPadre << endl;
-        cerrados.pop();
+    for (nodo* n : cerrados) {
+        cout << n->id << " " << n->idPadre << " " << n->coste << endl;
         delete n;
     }
 }
@@ -306,10 +304,8 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             continue;
         }
         cerrados.push_back(actual);
-
-        //cout << "Matriz de partida: " << endl;
-        //actual->tab.mostrarMatriz();
-        //cout << endl;
+        actual->tab.mostrarMatriz();
+        cout << endl;
 
         if(actual->tab.comprobarFin()) {
             cout << "¡Objetivo alcanzado!" << endl;
@@ -334,11 +330,8 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         }
     }
 
-    while (!abiertos.empty()) {
-        nodo *n = abiertos.top();
-        delete n;
-        abiertos.pop();
-    }
+    mostrarAbiertos(abiertos);
+
     for (nodo* n : cerrados) {
         delete n;
     }
