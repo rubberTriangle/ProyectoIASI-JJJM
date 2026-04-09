@@ -13,7 +13,7 @@ private:
     string heuristicas[2] = {"Distancia Manhattan simple", "Distancia Manhattan por vehículos"};
     string heuristicaSeleccionada;
     int sSelecIndex;
-    string resolucion[5] = {"IDA", "A*", "Escalada simple", "Escalada simple estocástica", "Búsqueda primero mejor con lista de abiertos y cerrados"};
+    string resolucion[6] = {"IDA", "A*", "Escalada simple", "Escalada simple estocástica", "Búsqueda primero mejor con lista de abiertos y cerrados", "de Haz (Beam Search)"};
     string resolucionSeleccionada;
 
     string alfa;
@@ -55,6 +55,7 @@ public:
     void metodoEscaladaSimpleEstocastica();
     void metodoBusquedaPrimeroMejorAC();
     void metodoBusquedaAstar();
+    void metodoBusquedaHaz();
 };
 
 #endif // JUGAR_H

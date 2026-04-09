@@ -22,6 +22,10 @@ jugar::jugar() {
         break;
     case 4:
         this->metodoBusquedaPrimeroMejorAC();
+        break;
+    case 5:
+        this->metodoBusquedaHaz();
+        break;
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
