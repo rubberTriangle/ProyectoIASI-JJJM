@@ -476,10 +476,10 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
 {
     int width;
     string in;
-    cout << "Introducir valor de anchura del haz (Pulsar enter para valor predeterminado (2)):" << endl;
+    cout << "Introducir valor de anchura del haz (Pulsar enter para valor predeterminado (5)):" << endl;
     getline(std::cin, in);
     if (in.empty()) {
-        width = 2;
+        width = 5;
     }else{
         width = stoi(in);
     }
@@ -510,7 +510,7 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
                     //mostramos solución
                     cout << "Solución:\n";
                     vector<Hnodo*> sol;
-                    for(Tablero* ctab = &newTab; !(*ctab == tableroInicial); actual = actual->padre){
+                    for(Tablero* ctab = &newTab; actual != nullptr; actual = actual->padre){
                         sol.push_back(actual);
                         ctab = &actual->tab;
                     }
