@@ -463,9 +463,9 @@ public:
     }
 };
 
-bool jugar::metodoBusquedaHaz()
+bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo creados, no habría que quizá contar los tableros generados/movimientos probados?
 {
-    int width = 2;
+    int width;
     string in;
     cout << "Introducir valor de anchura del haz (Pulsar enter para valor predeterminado (2)):" << endl;
     getline(std::cin, in);
@@ -476,52 +476,58 @@ bool jugar::metodoBusquedaHaz()
     }
     
     bool found = false;
-    vector<Hnodo*> cerrados;//(para limpieza tras retrazar la solución)
+    unordered_map<string, Hnodo*> cerrados;//(para limpieza, retrazar la solución y evitar ciclos)
     priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> abiertos;
     
     abiertos.push(new Hnodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial)));
+    cont = 1;
+    priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;//siguiente capa generada
     
     while(!abiertos.empty()){
-        Hnodo* actual = abiertos.top();
-        abiertos.pop();
-        cerrados.push_back(actual);
-        priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;
-        
-        //generamos los nodos hijos y calculamos su heuristica
-        vector<pair<Vehiculo*, Tablero::direccion>> posibles = actual->tab.movimientosPosibles();
-        for(auto mov : posibles){
-            Tablero newTab(actual->tab);
-            mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
-            newTab.realizarMovimiento(mov);
-            if(newTab.comprobarFin()){
-                cout << "¡Objetivo alcanzado!" << endl;
-                found = true;
-                //mostramos solución
-                cout << "Solución:\n";
-                vector<Hnodo*> sol;
-                for(Tablero* ctab = &newTab; !(*ctab == tableroInicial); actual = actual->padre){
-                    sol.push_back(actual);
-                    ctab = &actual->tab;
+        while(!abiertos.empty()){
+            Hnodo* actual = abiertos.top();
+            abiertos.pop();
+            cerrados.insert({actual->tab.key(), actual});
+            
+            //generamos los nodos hijos y calculamos su heuristica
+            vector<pair<Vehiculo*, Tablero::direccion>> posibles = actual->tab.movimientosPosibles();
+            for(auto mov : posibles){
+                Tablero newTab(actual->tab);
+                mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
+                newTab.realizarMovimiento(mov);
+                if(newTab.comprobarFin()){
+                    cout << "¡Objetivo alcanzado!" << endl;
+                    found = true;
+                    //mostramos solución
+                    cout << "Solución:\n";
+                    vector<Hnodo*> sol;
+                    for(Tablero* ctab = &newTab; !(*ctab == tableroInicial); actual = actual->padre){
+                        sol.push_back(actual);
+                        ctab = &actual->tab;
+                    }
+                    //retrazamos desde el principio
+                    for(auto it = sol.rbegin(); it != sol.rend(); it++){
+                        cout << endl;
+                        (*it)->tab.mostrarMatriz();
+                    }
+                    //limpiamos los abiertos que queden e hijos ahora innecesarios:
+                    while(!abiertos.empty()){
+                        delete abiertos.top();
+                        abiertos.pop();
+                    }
+                    while(!hijos.empty()){
+                        delete hijos.top();
+                        hijos.pop();
+                    }
+                    break;
                 }
-                //retrazamos desde el principio
-                for(auto it = sol.rbegin(); it != sol.rend(); it++){
-                    cout << endl;
-                    (*it)->tab.mostrarMatriz();
+                if(cerrados.count(newTab.key()) == 0){
+                    hijos.push(new Hnodo(actual, newTab, calcularHeuristica(&newTab)));
+                    cont++;
                 }
-                //limpiamos los abiertos que queden e hijos ahora innecesarios:
-                while(!abiertos.empty()){
-                    delete abiertos.top();
-                    abiertos.pop();
-                }
-                while(!hijos.empty()){
-                    delete hijos.top();
-                    hijos.pop();
-                }
-                break;
             }
-            hijos.push(new Hnodo(actual, newTab, calcularHeuristica(&newTab)));
+            
         }
-        
         //añadimos los <width> mejores nodos a la lista de abiertos
         for(int i = 0; i < width && !hijos.empty(); i++){
             abiertos.push(hijos.top());
@@ -532,12 +538,13 @@ bool jugar::metodoBusquedaHaz()
             delete hijos.top();
             hijos.pop();
         }
+        
     }
+    
     //limpiamos
-    for(int i = 0; i < cerrados.size(); i++)
-        delete cerrados[i];
-    if(!found){
+    for(auto pair : cerrados)
+        delete pair.second;
+    if(!found)
         cout << "No se ha encontrado la solución...\n";
-    }
     return found;
 }
