@@ -13,7 +13,7 @@ private:
     string heuristicas[2] = {"Distancia Manhattan simple", "Distancia Manhattan por vehículos"};
     string heuristicaSeleccionada;
     int sSelecIndex;
-    string resolucion[6] = {"IDA", "A*", "Escalada simple", "Escalada simple estocástica", "Búsqueda primero mejor con lista de abiertos y cerrados", "de Haz (Beam Search)"};
+    string resolucion[6] = {"IDA", "A*", "Escalada simple", "Escalada simple estocástica", "Búsqueda primero mejor con lista de abiertos y cerrados", "Búsqueda de Haz (Beam Search)"};
     string resolucionSeleccionada;
 
     string alfa;

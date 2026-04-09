@@ -48,7 +48,7 @@ void jugar::elegirHeuristica () {
 void jugar::elegirMetodo () {
 
     cout << "Elige el método de resolución a utilizar: (Presiona Enter para valor predeterminado)" << endl;
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
         cout << "[" << i << "] " << resolucion[i] << endl;
     }
 
