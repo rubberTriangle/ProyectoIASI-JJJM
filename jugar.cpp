@@ -348,9 +348,10 @@ struct Anodo{
     Anodo* padre;
     std::vector<Anodo*> hijos;
     Tablero tab;
-    float g, h;
+    float h;
+    int g;
     Anodo(){};
-    Anodo(Anodo* padre, Tablero const& tab, float h = 0, float g = 0)
+    Anodo(Anodo* padre, Tablero const& tab, float h = 0, int g = 0)
         : padre(padre), tab(tab), h(h), g(g){}
     void cascadeG(){
         for(Anodo* n : hijos){
@@ -443,4 +444,100 @@ void jugar::metodoBusquedaAstar()
     }
     for(auto pair : cerrados)
         delete pair.second;
+}
+
+struct Hnodo{
+    Hnodo* padre;
+    Tablero tab;
+    float h;
+    Hnodo(Hnodo* padre, Tablero const& tab, float h)
+        : padre(padre), tab(tab), h(h){}
+    static bool comp(Hnodo* lhs, Hnodo* rhs){
+        return lhs->h < rhs->h;
+    }
+};
+template<> class std::less<Hnodo*>{
+public:
+    constexpr bool operator()(Hnodo* lhs, Hnodo* rhs) const{
+        return lhs->h < rhs->h;
+    }
+};
+
+bool jugar::metodoBusquedaHaz()
+{
+    int width = 2;
+    string in;
+    cout << "Introducir valor de anchura del haz (Pulsar enter para valor predeterminado (2)):" << endl;
+    getline(std::cin, in);
+    if (in.empty()) {
+        width = 2;
+    }else{
+        width = stoi(in);
+    }
+    
+    bool found = false;
+    vector<Hnodo*> cerrados;//(para limpieza tras retrazar la solución)
+    priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> abiertos;
+    
+    abiertos.push(new Hnodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial)));
+    
+    while(!abiertos.empty()){
+        Hnodo* actual = abiertos.top();
+        abiertos.pop();
+        cerrados.push_back(actual);
+        priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;
+        
+        //generamos los nodos hijos y calculamos su heuristica
+        vector<pair<Vehiculo*, Tablero::direccion>> posibles = actual->tab.movimientosPosibles();
+        for(auto mov : posibles){
+            Tablero newTab(actual->tab);
+            mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
+            newTab.realizarMovimiento(mov);
+            if(newTab.comprobarFin()){
+                cout << "¡Objetivo alcanzado!" << endl;
+                found = true;
+                //mostramos solución
+                cout << "Solución:\n";
+                vector<Hnodo*> sol;
+                for(Tablero* ctab = &newTab; !(*ctab == tableroInicial); actual = actual->padre){
+                    sol.push_back(actual);
+                    ctab = &actual->tab;
+                }
+                //retrazamos desde el principio
+                for(auto it = sol.rbegin(); it != sol.rend(); it++){
+                    cout << endl;
+                    (*it)->tab.mostrarMatriz();
+                }
+                //limpiamos los abiertos que queden e hijos ahora innecesarios:
+                while(!abiertos.empty()){
+                    delete abiertos.top();
+                    abiertos.pop();
+                }
+                while(!hijos.empty()){
+                    delete hijos.top();
+                    hijos.pop();
+                }
+                break;
+            }
+            hijos.push(new Hnodo(actual, newTab, calcularHeuristica(&newTab)));
+        }
+        
+        //añadimos los <width> mejores nodos a la lista de abiertos
+        for(int i = 0; i < width && !hijos.empty(); i++){
+            abiertos.push(hijos.top());
+            hijos.pop();
+        }
+        //descartamos el resto de hijos
+        while(!hijos.empty()){
+            delete hijos.top();
+            hijos.pop();
+        }
+    }
+    //limpiamos
+    for(int i = 0; i < cerrados.size(); i++)
+        delete cerrados[i];
+    if(!found){
+        cout << "No se ha encontrado la solución...\n";
+    }
+    return found;
 }

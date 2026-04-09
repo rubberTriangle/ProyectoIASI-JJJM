@@ -55,7 +55,7 @@ public:
     void metodoEscaladaSimpleEstocastica();
     void metodoBusquedaPrimeroMejorAC();
     void metodoBusquedaAstar();
-    void metodoBusquedaHaz();
+    bool metodoBusquedaHaz();
 };
 
 #endif // JUGAR_H
