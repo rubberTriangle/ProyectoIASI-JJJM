@@ -107,6 +107,14 @@ void Tablero::mostrarMatriz(){
     }
 }
 
+string Tablero::key()
+{
+    string ret;
+    for(Vehiculo* v : vehiculos)
+        ret += to_string(v->partes.front().first) + ',' + to_string(v->partes.front().second) + ';';
+    return ret;
+}
+
 bool Tablero::comprobarFin()
 {
     return (posZ.first == 0 || posZ.first == ancho - 1 || posZ.second == 0 || posZ.second == alto - 1);

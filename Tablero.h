@@ -28,6 +28,9 @@ public:
     Tablero();
     Tablero(Tablero const& other);
     void mostrarMatriz();
+    
+    string key();//genera una string única al estado actual de la matriz
+    
     vector<pair<Vehiculo*, direccion> > movimientosPosibles(); // 0 izq, 1, arr, 2 der, 3 aba
     void realizarMovimiento(pair<Vehiculo*, direccion> v);
     bool comprobarFin();
