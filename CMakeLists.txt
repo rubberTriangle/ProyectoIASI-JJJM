@@ -10,6 +10,7 @@ add_executable(ProyectoIASI main.cpp
     Tablero.h Tablero.cpp
     vehiculo.h vehiculo.cpp
     jugar.h jugar.cpp
+    modifiableHeap.h
 
 )
 
