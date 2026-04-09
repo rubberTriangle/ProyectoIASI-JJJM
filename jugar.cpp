@@ -359,11 +359,20 @@ struct Anodo{
             n->cascadeG();
         }
     }
+    float f() const{
+        return h+g;
+    }
+};
+template<> class std::less<Anodo*>{
+public:
+    constexpr bool operator()(Anodo* lhs, Anodo* rhs) const{
+        return lhs->f() < rhs->f();
+    }
 };
 
 void jugar::metodoBusquedaAstar()
 {
-    ModifiableHeap<Anodo*> abiertos;
+    ModifiableHeap<Anodo*, std::less<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
     Anodo* nodoActual = new Anodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial), 0);
     
@@ -418,7 +427,7 @@ void jugar::metodoBusquedaAstar()
                         //mostramos solución
                         cout << "Solución:\n";
                         vector<Anodo*> sol;
-                        for(Tablero* ctab = &newTab; !(*ctab == tableroInicial); nodoActual = nodoActual->padre){
+                        for(Tablero* ctab = &newTab; nodoActual != nullptr; nodoActual = nodoActual->padre){
                             sol.push_back(nodoActual);
                             ctab = &nodoActual->tab;
                         }
