@@ -359,7 +359,7 @@ struct Anodo{
             n->cascadeG();
         }
     }
-    float f() const{
+    constexpr float f() const{
         return h+g;
     }
 };
@@ -451,7 +451,7 @@ void jugar::metodoBusquedaAstar()
             }
         }
     }
-    for(auto pair : cerrados)
+    for(auto &pair : cerrados)
         delete pair.second;
 }
 
@@ -551,7 +551,7 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
     }
     
     //limpiamos
-    for(auto pair : cerrados)
+    for(auto &pair : cerrados)
         delete pair.second;
     if(!found)
         cout << "No se ha encontrado la solución...\n";
