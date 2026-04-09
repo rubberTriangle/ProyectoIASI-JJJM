@@ -12,6 +12,7 @@ jugar::jugar() {
         this->metodoIDA();
         break;
     case 1:
+        this->metodoBusquedaAstar();
         break;
     case 2:
         this->metodoEscaladaSimple();
@@ -372,6 +373,7 @@ void jugar::metodoBusquedaAstar()
         
         for(auto mov : posibles){
             Tablero newTab(nodoActual->tab);
+            mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
             newTab.realizarMovimiento(mov);
             
             if(cerrados.count(newTab.key()) > 0){//está el nuevo nodo en cerrados?
@@ -416,8 +418,10 @@ void jugar::metodoBusquedaAstar()
                             ctab = &nodoActual->tab;
                         }
                         //retrazamos desde el principio
-                        for(auto it = sol.rbegin(); it != sol.rend(); it++)
+                        for(auto it = sol.rbegin(); it != sol.rend(); it++){
+                            cout << endl;
                             (*it)->tab.mostrarMatriz();
+                        }
                         //limpiamos los abiertos que queden:
                         while(!abiertos.empty()){
                             delete abiertos.top();
