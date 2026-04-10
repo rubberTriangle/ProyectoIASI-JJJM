@@ -511,11 +511,12 @@ void jugar::metodoBusquedaAstar()
 }
 
 struct Hnodo{
+    char vehiculoMovido;
     Hnodo* padre;
     Tablero tab;
     float h;
-    Hnodo(Hnodo* padre, Tablero const& tab, float h)
-        : padre(padre), tab(tab), h(h){}
+    Hnodo(Hnodo* padre, Tablero const& tab, char vehiculoMovido, float h)
+        : padre(padre), tab(tab), vehiculoMovido(vehiculoMovido), h(h){}
     static bool comp(Hnodo* lhs, Hnodo* rhs){
         return lhs->h < rhs->h;
     }
@@ -544,7 +545,7 @@ bool jugar::metodoBusquedaHaz()
     unordered_map<string, Hnodo*> cerrados;//(para limpieza, retrazar la solución y evitar ciclos)
     priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> abiertos;
     
-    abiertos.push(new Hnodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial)));
+    abiertos.push(new Hnodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial)));
     priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;//siguiente capa generada
     
     while(!abiertos.empty()){
@@ -572,8 +573,9 @@ bool jugar::metodoBusquedaHaz()
                     }
                     //retrazamos desde el principio
                     for(auto it = sol.rbegin(); it != sol.rend(); it++){
-                        cout << endl;
+                        cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
                         (*it)->tab.mostrarMatriz();
+                        cout << endl;
                     }
                     //limpiamos los abiertos que queden e hijos ahora innecesarios:
                     while(!abiertos.empty()){
@@ -587,7 +589,7 @@ bool jugar::metodoBusquedaHaz()
                     break;
                 }
                 if(cerrados.count(newTab.key()) == 0){
-                    hijos.push(new Hnodo(actual, newTab, calcularHeuristica(&newTab)));
+                    hijos.push(new Hnodo(actual, newTab, mov.first->letra, calcularHeuristica(&newTab)));
                     cont++;
                 }
             }
