@@ -552,9 +552,6 @@ struct Hnodo{
     float h;
     Hnodo(Hnodo* padre, Tablero const& tab, char vehiculoMovido, float h)
         : padre(padre), tab(tab), vehiculoMovido(vehiculoMovido), h(h){}
-    static bool comp(Hnodo* lhs, Hnodo* rhs){
-        return lhs->h < rhs->h;
-    }
 };
 template<> class std::less<Hnodo*>{
 public:
