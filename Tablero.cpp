@@ -16,16 +16,10 @@ Tablero::Tablero() {
 
     if (nombreTablero.empty()) {
         nombreTablero = "1";
-        ancho = 6;
-        alto = 6;
-    }else{
-        cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
-        string tancho, talto;
-        getline (std::cin, tancho);
-        getline (std::cin, talto);
-        ancho = (stoi(tancho));
-        alto = (stoi(talto));
     }
+
+    ancho = 6;
+    alto = 6;
 
     importarMatriz();
 }
