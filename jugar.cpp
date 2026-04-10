@@ -1,12 +1,14 @@
 #include "jugar.h"
 #include <unordered_map>
 #include "modifiableHeap.h"
+#include <chrono>
 
 jugar::jugar() {
     alfa = 3;
     cont = 0;
     this->elegirHeuristica();
     this->elegirMetodo();
+    auto begin = std::chrono::high_resolution_clock::now();
     switch(stoi(this->resolucionSeleccionada)){
     case 0:
         this->metodoIDA();
@@ -29,6 +31,9 @@ jugar::jugar() {
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("\n%f seconds.\n", elapsed.count() * 1e-9);
 }
 
 void jugar::elegirHeuristica () {
