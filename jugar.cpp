@@ -149,7 +149,7 @@ bool jugar::existeEnAbiertos(priority_queue<nodo*, vector<nodo*>, CompararNodos>
     return false;
 }
 
-void jugar::buscarNodos (vector <nodo*> cerrados) {
+void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
     nodo *actual = cerrados.back();
     vector<nodo*> camino;
 
@@ -377,7 +377,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
     vector <nodo*> cerrados;
 
-    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial};
+    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial, ' '};
     abiertos.push(inicial);
 
     while (!abiertos.empty()) {
@@ -392,6 +392,9 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         }
 
         cerrados.push_back(actual);
+        if (actual->vehiculoMovido != ' ') {
+            cout << "Vehículo movido: " << actual->vehiculo << endl;
+        }
         actual->tab.mostrarMatriz();
         cout << endl;
 
@@ -411,7 +414,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             if (!existeEnCerrados(cerrados, auxiliar)) {
                 i++;
                 int hAuxiliar = calcularHeuristica(&auxiliar);
-                nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar);
+                nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar, m.first->letra);
                 abiertos.push(hijo);
             }
         }
@@ -419,7 +422,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         mostrarCerrados(cerrados);
     }
 
-    buscarNodos(cerrados);
+    buscarNodosSolucion(cerrados);
 
     printElapsedTime(begin);
 }

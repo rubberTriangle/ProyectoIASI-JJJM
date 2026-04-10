@@ -26,11 +26,12 @@ private:
         int idPadre;
         int coste;
         Tablero tab;
+        char vehiculo;
 
-        nodo(int _id, int _idPadre, int _coste, Tablero _tab)
-            : id(_id), idPadre(_idPadre), coste(_coste), tab(_tab) {}
+        nodo(int _id, int _idPadre, int _coste, Tablero _tab, char _vehiculo)
+            : id(_id), idPadre(_idPadre), coste(_coste), tab(_tab), vehiculo(_vehiculo) {}
 
-        nodo() : id(0), idPadre(-1), coste(0) {}
+        nodo() : id(0), idPadre(-1), coste(0), vehiculo(' ') {}
     };
     struct CompararNodos {
         bool operator()(const nodo* a, const nodo* b) {
@@ -50,7 +51,7 @@ public:
     void mostrarMovimientosAC(int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov);
     bool existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual);
     bool existeEnAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos, const Tablero& tabActual);
-    void buscarNodos (vector <nodo*> cerrados);
+    void buscarNodosSolucion (vector <nodo*> cerrados);
     void mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos);
     void mostrarCerrados(vector<nodo *> cerrados);
     int calcularHeuristica(Tablero *t);
