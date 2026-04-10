@@ -154,12 +154,43 @@ bool jugar::existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabAc
     return false;
 }
 
+bool jugar::existeEnAbiertos(priority_queue<nodo*, vector<nodo*>, CompararNodos> abiertos, const Tablero& tabActual) {
+    while (!abiertos.empty()) {
+        if (abiertos.top()->tab == tabActual)
+            return true;
+        abiertos.pop();
+    }
+    return false;
+}
+
+void jugar::buscarNodos (vector <nodo*> cerrados) {
+    nodo *actual = cerrados.back();
+    vector<nodo*> camino;
+
+    while (actual != nullptr) {
+        camino.push_back(actual);
+
+        nodo* padre = nullptr;
+        for (nodo* n : cerrados) {
+            if (n->id == actual->idPadre) {
+                padre = n;
+                break;
+            }
+        }
+        actual = padre;
+    }
+    reverse(camino.begin(), camino.end());
+    for (nodo* n : camino) {
+        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
+    }
+}
+
 void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos) {
     cout << "\n=== LISTA ABIERTOS ===" << endl;
 
     while (!abiertos.empty()) {
         nodo *n = abiertos.top();
-        cout << n->id << " " << n->idPadre << " " << n->coste << endl;
+        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
         abiertos.pop();
         delete n;
     }
@@ -169,8 +200,7 @@ void jugar::mostrarCerrados(vector <nodo*> cerrados) {
     cout << "\n=== LISTA CERRADOS ===" << endl;
 
     for (nodo* n : cerrados) {
-        cout << n->id << " " << n->idPadre << " " << n->coste << endl;
-        delete n;
+        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
     }
 }
 
@@ -359,6 +389,10 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         if (existeEnCerrados(cerrados, actual->tab)) {
             continue;
         }
+        if (existeEnAbiertos(abiertos, actual->tab)) {
+            continue;
+        }
+
         cerrados.push_back(actual);
         actual->tab.mostrarMatriz();
         cout << endl;
@@ -385,6 +419,8 @@ void jugar::metodoBusquedaPrimeroMejorAC()
                 abiertos.push(hijo);
             }
         }
+
+
     }
 
     mostrarAbiertos(abiertos);

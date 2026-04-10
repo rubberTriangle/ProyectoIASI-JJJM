@@ -49,6 +49,8 @@ public:
     bool mostrarUnMovimientoEstocastica(int &i, int &h);
     void mostrarMovimientosAC(int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov);
     bool existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual);
+    bool existeEnAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos, const Tablero& tabActual);
+    void buscarNodos (vector <nodo*> cerrados);
     void mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos);
     void mostrarCerrados(vector<nodo *> cerrados);
     int calcularHeuristica(Tablero *t);
