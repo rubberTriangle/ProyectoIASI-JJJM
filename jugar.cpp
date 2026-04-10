@@ -520,6 +520,10 @@ void jugar::metodoBusquedaAstar()
                             (*it)->tab.mostrarMatriz();
                             cout << endl;
                         }
+                        //mostramos final
+                        cout << "Vehiculo movido: " << mov.first->letra << endl;
+                        newTab.mostrarMatriz();
+                        cout << endl;
                         //limpiamos los abiertos que queden:
                         while(!abiertos.empty()){
                             delete abiertos.top();
@@ -547,9 +551,6 @@ struct Hnodo{
     float h;
     Hnodo(Hnodo* padre, Tablero const& tab, char vehiculoMovido, float h)
         : padre(padre), tab(tab), vehiculoMovido(vehiculoMovido), h(h){}
-    static bool comp(Hnodo* lhs, Hnodo* rhs){
-        return lhs->h < rhs->h;
-    }
 };
 template<> class std::less<Hnodo*>{
 public:
@@ -597,7 +598,7 @@ bool jugar::metodoBusquedaHaz()
                     //mostramos solución
                     cout << "Solución:\n";
                     vector<Hnodo*> sol;
-                    for(Tablero* ctab = &newTab; actual != nullptr; actual = actual->padre){
+                    for(Tablero* ctab = &newTab; actual->padre != nullptr; actual = actual->padre){
                         sol.push_back(actual);
                         ctab = &actual->tab;
                     }
@@ -607,6 +608,10 @@ bool jugar::metodoBusquedaHaz()
                         (*it)->tab.mostrarMatriz();
                         cout << endl;
                     }
+                    //mostramos final
+                    cout << "Vehiculo movido: " << mov.first->letra << endl;
+                    newTab.mostrarMatriz();
+                    cout << endl;
                     //limpiamos los abiertos que queden e hijos ahora innecesarios:
                     while(!abiertos.empty()){
                         delete abiertos.top();
