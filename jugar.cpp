@@ -30,6 +30,7 @@ jugar::jugar() {
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
+    cout << "Nodos generados: " << cont << endl;
 }
 
 void jugar::elegirHeuristica () {
@@ -79,6 +80,7 @@ void jugar::mostrarMovimientos(Tablero &t, int &indice, int &heuristica)
         movimientosPosibles[i].first = auxiliar->matriz[movimientosPosibles[i].first->partes.front().first][movimientosPosibles[i].first->partes.front().second];
         cout << " - Vehiculo movido: \'" << movimientosPosibles[i].first->letra << '\'' << endl;
         auxiliar->realizarMovimiento(movimientosPosibles[i]);
+        cont++;
 
         int h = calcularHeuristica(auxiliar);
 
@@ -229,6 +231,7 @@ int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
             m.first = auxiliar.matriz[m.first->partes.front().first][m.first->partes.front().second];
 
             auxiliar.realizarMovimiento(m);
+            cont++;
 
             int temp = busquedaIDA(auxiliar, g + 1, umbral);
 
@@ -273,6 +276,7 @@ void jugar::metodoEscaladaSimple()
         h_actual = h_siguiente;
 
         this->tableroInicial.realizarMovimiento(this->tableroInicial.movimientosPosibles()[i]);
+        cont++;
     }
     printElapsedTime(begin);
 }
@@ -295,6 +299,7 @@ void jugar::metodoEscaladaSimpleEstocastica()
         if (this->mostrarUnMovimientoEstocastica(i, h)) {
             vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
             this->tableroInicial.realizarMovimiento(mov[i]);
+            cont++;
 
             if(tableroInicial.comprobarFin()) {
                 cout << "¡Objetivo alcanzado!" << endl;
@@ -340,12 +345,12 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             Tablero auxiliar = actual->tab;
             m.first = auxiliar.matriz[m.first->partes.front().first][m.first->partes.front().second];
             auxiliar.realizarMovimiento(m);
+            cont++;
 
             if (!existeEnCerrados(cerrados, auxiliar)) {
                 i++;
                 int hAuxiliar = calcularHeuristica(&auxiliar);
                 //this->mostrarMovimientosAC(i, hAuxiliar, &auxiliar, &m);
-                cont++;
                 nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar);
                 abiertos.push(hijo);
             }
@@ -406,6 +411,7 @@ void jugar::metodoBusquedaAstar()
             Tablero newTab(nodoActual->tab);
             mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
             newTab.realizarMovimiento(mov);
+            cont++;
             
             if(cerrados.count(newTab.key()) > 0){//está el nuevo nodo en cerrados?
                 Anodo* old = cerrados.find(newTab.key())->second;
@@ -508,7 +514,6 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
     priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> abiertos;
     
     abiertos.push(new Hnodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial)));
-    cont = 1;
     priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;//siguiente capa generada
     
     while(!abiertos.empty()){
@@ -523,6 +528,7 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
                 Tablero newTab(actual->tab);
                 mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
                 newTab.realizarMovimiento(mov);
+                cont++;
                 if(newTab.comprobarFin()){
                     cout << "¡Objetivo alcanzado!" << endl;
                     found = true;
