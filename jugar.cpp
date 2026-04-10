@@ -613,6 +613,10 @@ bool jugar::metodoBusquedaHaz()
                         (*it)->tab.mostrarMatriz();
                         cout << endl;
                     }
+                    //mostramos final
+                    cout << "Vehiculo movido: " << mov.first->letra << endl;
+                    newTab.mostrarMatriz();
+                    cout << endl;
                     //limpiamos los abiertos que queden e hijos ahora innecesarios:
                     while(!abiertos.empty()){
                         delete abiertos.top();
