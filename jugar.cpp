@@ -357,7 +357,6 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         abiertos.pop();
 
         if (existeEnCerrados(cerrados, actual->tab)) {
-            delete actual;
             continue;
         }
         cerrados.push_back(actual);
@@ -389,10 +388,8 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     }
 
     mostrarAbiertos(abiertos);
+    mostrarCerrados(cerrados);
 
-    for (nodo* n : cerrados) {
-        delete n;
-    }
     printElapsedTime(begin);
 }
 
