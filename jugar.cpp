@@ -525,6 +525,10 @@ void jugar::metodoBusquedaAstar()
                             (*it)->tab.mostrarMatriz();
                             cout << endl;
                         }
+                        //mostramos final
+                        cout << "Vehiculo movido: " << mov.first->letra << endl;
+                        newTab.mostrarMatriz();
+                        cout << endl;
                         //limpiamos los abiertos que queden:
                         while(!abiertos.empty()){
                             delete abiertos.top();
