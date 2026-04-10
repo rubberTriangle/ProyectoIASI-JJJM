@@ -5,15 +5,26 @@
 
 Tablero::Tablero() {
     cout << "Introduce el tablero que quieres utilizar (Presiona Enter para valores predeterminados): " << endl;
+
+    int j = 1;
+    for(int i = 0; i < 10; i++){
+        cout << "[" << j << "] " << tableros[i] << endl;
+        j++;
+    }
+
     getline(std::cin, nombreTablero);
 
     if (nombreTablero.empty()) {
-        nombreTablero = "HORAPUNTA1";
+        nombreTablero = "1";
         ancho = 6;
         alto = 6;
     }else{
         cout << "Introduce la anchura y la altura del tablero del fichero seleccionado: " << endl;
-        cin >> ancho >> alto;
+        string tancho, talto;
+        getline (std::cin, tancho);
+        getline (std::cin, talto);
+        ancho = (stoi(tancho));
+        alto = (stoi(talto));
     }
 
     importarMatriz();
@@ -62,7 +73,7 @@ void Tablero::importarMatriz(){
     
     std::vector<std::vector<char>> chmat(ancho, vector<char>(alto));
 
-    ifstream archivo("ficheros/" + nombreTablero + ".txt");
+    ifstream archivo("ficheros/HORAPUNTA" + nombreTablero + ".txt");
     string linea;
 
     if(archivo.is_open()){

@@ -15,7 +15,9 @@ private:
     std::list<Vehiculo*> vehiculos;
     pair<int, int> posX;
     pair<int, int> posZ;
-    
+
+    string tableros[10] = {"HORAPUNTA1.txt", "HORAPUNTA2.txt", "HORAPUNTA3.txt", "HORAPUNTA4.txt", "HORAPUNTA5.txt", "HORAPUNTA6.txt", "HORAPUNTA7.txt", "HORAPUNTA8.txt", "HORAPUNTA9.txt", "HORAPUNTA10.txt"};
+    int tSelecIndex;
     //PRE: chmat debe tener al menos 1 elemento
     void procesarMatriz(vector<vector<char>> const& chmat, vector<vector<Vehiculo*>> &m);
     void importarMatriz();
