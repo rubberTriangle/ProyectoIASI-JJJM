@@ -603,7 +603,7 @@ bool jugar::metodoBusquedaHaz()
                     //mostramos solución
                     cout << "Solución:\n";
                     vector<Hnodo*> sol;
-                    for(Tablero* ctab = &newTab; actual != nullptr; actual = actual->padre){
+                    for(Tablero* ctab = &newTab; actual->padre != nullptr; actual = actual->padre){
                         sol.push_back(actual);
                         ctab = &actual->tab;
                     }
