@@ -8,7 +8,6 @@ jugar::jugar() {
     cont = 0;
     this->elegirHeuristica();
     this->elegirMetodo();
-    auto begin = std::chrono::high_resolution_clock::now();
     switch(stoi(this->resolucionSeleccionada)){
     case 0:
         this->metodoIDA();
@@ -31,9 +30,6 @@ jugar::jugar() {
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-    printf("\n%f seconds.\n", elapsed.count() * 1e-9);
 }
 
 void jugar::elegirHeuristica () {
@@ -193,6 +189,7 @@ int jugar::calcularHeuristica(Tablero *t)
 
 void jugar::metodoIDA()
 {
+    auto begin = std::chrono::high_resolution_clock::now();
     int umbral = calcularHeuristica(&tableroInicial);
 
     while(true){
@@ -206,6 +203,7 @@ void jugar::metodoIDA()
             umbral = temp;
         }
     }
+    printElapsedTime(begin);
 }
 
 int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
@@ -249,8 +247,16 @@ int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
     }
 }
 
+void jugar::printElapsedTime(chrono::time_point<chrono::system_clock, std::chrono::duration<long, ratio<1, 1000000000> > > begin)
+{
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    printf("\n%f seconds.\n", elapsed.count() * 1e-9);
+}
+
 void jugar::metodoEscaladaSimple()
 {
+    auto begin = std::chrono::high_resolution_clock::now();
     int i = 0;
     int h_siguiente;
 
@@ -268,6 +274,7 @@ void jugar::metodoEscaladaSimple()
 
         this->tableroInicial.realizarMovimiento(this->tableroInicial.movimientosPosibles()[i]);
     }
+    printElapsedTime(begin);
 }
 
 void jugar::metodoEscaladaSimpleEstocastica()
@@ -278,7 +285,8 @@ void jugar::metodoEscaladaSimpleEstocastica()
         alfa = "3";
     }
     cout << "Alfa = " << alfa << endl;
-
+    
+    auto begin = std::chrono::high_resolution_clock::now();
     int h = INT_MAX;
 
     while (true) {
@@ -297,10 +305,12 @@ void jugar::metodoEscaladaSimpleEstocastica()
             break;
         }
     }
+    printElapsedTime(begin);
 }
 
 void jugar::metodoBusquedaPrimeroMejorAC()
 {
+    auto begin = std::chrono::high_resolution_clock::now();
     priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
     vector <nodo*> cerrados;
 
@@ -347,6 +357,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     for (nodo* n : cerrados) {
         delete n;
     }
+    printElapsedTime(begin);
 }
 
 struct Anodo{
@@ -377,6 +388,7 @@ public:
 
 void jugar::metodoBusquedaAstar()
 {
+    auto begin = std::chrono::high_resolution_clock::now();
     ModifiableHeap<Anodo*, std::less<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
     Anodo* nodoActual = new Anodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial), 0);
@@ -458,6 +470,7 @@ void jugar::metodoBusquedaAstar()
     }
     for(auto &pair : cerrados)
         delete pair.second;
+    printElapsedTime(begin);
 }
 
 struct Hnodo{
@@ -488,6 +501,7 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
     }else{
         width = stoi(in);
     }
+    auto begin = std::chrono::high_resolution_clock::now();
     
     bool found = false;
     unordered_map<string, Hnodo*> cerrados;//(para limpieza, retrazar la solución y evitar ciclos)
@@ -560,5 +574,6 @@ bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo c
         delete pair.second;
     if(!found)
         cout << "No se ha encontrado la solución...\n";
+    printElapsedTime(begin);
     return found;
 }

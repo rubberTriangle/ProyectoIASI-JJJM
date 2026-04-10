@@ -1,6 +1,7 @@
 #ifndef JUGAR_H
 #define JUGAR_H
 
+#include <chrono>
 #include <iostream>
 #include <climits>
 #include <queue>
@@ -38,6 +39,7 @@ private:
     };
 
     int busquedaIDA(Tablero &tableroActual, int g, int umbral);
+    inline void printElapsedTime(chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, ratio<1,1000000000>>> begin);
 
 public:
     jugar();
