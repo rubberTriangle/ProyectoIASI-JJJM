@@ -131,20 +131,6 @@ bool jugar::mostrarUnMovimientoEstocastica(int &indice, int &heuristica)
     return encontrado;
 }
 
-void jugar::mostrarMovimientosAC (int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov)
-{
-    cout << "Posible movimiento " << indice << ':' << endl;
-    cout << " - Vehiculo movido: \'" << mov->first->letra << '\'' << endl;
-
-    int h = calcularHeuristica(t);
-    cout << " - h' = " << h << endl;
-
-    t->mostrarMatriz();
-    cout << endl;
-}
-
-
-
 bool jugar::existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual) {
     for (nodo* n : cerrados) {
         if (n->tab == tabActual) {
@@ -180,9 +166,14 @@ void jugar::buscarNodos (vector <nodo*> cerrados) {
         actual = padre;
     }
     reverse(camino.begin(), camino.end());
-    for (nodo* n : camino) {
-        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
+    cout << "\n=== SOLUCIÓN ===" << endl;
+    for (int i = 0; i < cerrados.size(); i++) {
+        cout << cerrados[i]->id << " (" << cerrados[i]->idPadre << ")";
+        if (i < cerrados.size() - 1) {
+            cout << ", ";
+        }
     }
+    cout << endl;
 }
 
 void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos) {
@@ -190,18 +181,25 @@ void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos>
 
     while (!abiertos.empty()) {
         nodo *n = abiertos.top();
-        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
+        cout << n->id << " (" << n->idPadre << ", " << n-> coste << ")";
+        if (!abiertos.empty()) {
+            cout << ", ";
+        }
         abiertos.pop();
-        delete n;
     }
+    cout << endl;
 }
 
 void jugar::mostrarCerrados(vector <nodo*> cerrados) {
     cout << "\n=== LISTA CERRADOS ===" << endl;
 
-    for (nodo* n : cerrados) {
-        cout << "id: " << n->id << " idPadre: " << n->idPadre << " coste: " << n-> coste << endl;
+    for (int i = 0; i < cerrados.size(); i++) {
+        cout << cerrados[i]->id << " (" << cerrados[i]->idPadre << ")";
+        if (i < cerrados.size() - 1) {
+            cout << ", ";
+        }
     }
+    cout << endl << endl;
 }
 
 int jugar::calcularHeuristica(Tablero *t)
@@ -413,18 +411,15 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             if (!existeEnCerrados(cerrados, auxiliar)) {
                 i++;
                 int hAuxiliar = calcularHeuristica(&auxiliar);
-                cout << "Vehiculo movido: " << m.first->letra << endl;
-                //this->mostrarMovimientosAC(i, hAuxiliar, &auxiliar, &m);
                 nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar);
                 abiertos.push(hijo);
             }
         }
-
-
+        mostrarAbiertos(abiertos);
+        mostrarCerrados(cerrados);
     }
 
-    mostrarAbiertos(abiertos);
-    mostrarCerrados(cerrados);
+    buscarNodos(cerrados);
 
     printElapsedTime(begin);
 }
