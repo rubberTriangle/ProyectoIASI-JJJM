@@ -395,14 +395,15 @@ void jugar::metodoBusquedaPrimeroMejorAC()
 }
 
 struct Anodo{
+    char vehiculoMovido;
     Anodo* padre;
     std::vector<Anodo*> hijos;
     Tablero tab;
     float h;
     int g;
     Anodo(){};
-    Anodo(Anodo* padre, Tablero const& tab, float h = 0, int g = 0)
-        : padre(padre), tab(tab), h(h), g(g){}
+    Anodo(Anodo* padre, Tablero const& tab, char vehiculoMovido, float h = 0, int g = 0)
+        : padre(padre), tab(tab), vehiculoMovido(vehiculoMovido), h(h), g(g){}
     void cascadeG(){
         for(Anodo* n : hijos){
             n->g = g+1;
@@ -425,7 +426,7 @@ void jugar::metodoBusquedaAstar()
     auto begin = std::chrono::high_resolution_clock::now();
     ModifiableHeap<Anodo*, std::less<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
-    Anodo* nodoActual = new Anodo(nullptr, tableroInicial, calcularHeuristica(&tableroInicial), 0);
+    Anodo* nodoActual = new Anodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial), 0);
     
     abiertos.push(nodoActual);
     while(!abiertos.empty()){
@@ -479,14 +480,15 @@ void jugar::metodoBusquedaAstar()
                         //mostramos solución
                         cout << "Solución:\n";
                         vector<Anodo*> sol;
-                        for(Tablero* ctab = &newTab; nodoActual != nullptr; nodoActual = nodoActual->padre){
+                        for(Tablero* ctab = &newTab; nodoActual->padre != nullptr; nodoActual = nodoActual->padre){
                             sol.push_back(nodoActual);
                             ctab = &nodoActual->tab;
                         }
                         //retrazamos desde el principio
                         for(auto it = sol.rbegin(); it != sol.rend(); it++){
-                            cout << endl;
+                            cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
                             (*it)->tab.mostrarMatriz();
+                            cout << endl;
                         }
                         //limpiamos los abiertos que queden:
                         while(!abiertos.empty()){
@@ -495,7 +497,7 @@ void jugar::metodoBusquedaAstar()
                         }
                         break;
                     }else{//el nuevo nodo no es el final
-                        Anodo* newNodo = new Anodo(nodoActual, newTab, calcularHeuristica(&newTab), nodoActual->g+1);
+                        Anodo* newNodo = new Anodo(nodoActual, newTab, mov.first->letra, calcularHeuristica(&newTab), nodoActual->g+1);
                         nodoActual->hijos.push_back(newNodo);
                         abiertos.push(newNodo);
                     }
