@@ -328,6 +328,7 @@ void jugar::metodoEscaladaSimpleEstocastica()
         if (this->mostrarUnMovimientoEstocastica(i, h)) {
             vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
             this->tableroInicial.realizarMovimiento(mov[i]);
+            cout << "Vehículo movido: " << mov[i].first->letra << endl;
             cont++;
 
             if(tableroInicial.comprobarFin()) {
@@ -379,6 +380,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             if (!existeEnCerrados(cerrados, auxiliar)) {
                 i++;
                 int hAuxiliar = calcularHeuristica(&auxiliar);
+                cout << "Vehiculo movido: " << m.first->letra << endl;
                 //this->mostrarMovimientosAC(i, hAuxiliar, &auxiliar, &m);
                 nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar);
                 abiertos.push(hijo);
