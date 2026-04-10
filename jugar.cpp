@@ -392,7 +392,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         }
 
         cerrados.push_back(actual);
-        if (actual->vehiculoMovido != ' ') {
+        if (actual->vehiculo != ' ') {
             cout << "Vehículo movido: " << actual->vehiculo << endl;
         }
         actual->tab.mostrarMatriz();
