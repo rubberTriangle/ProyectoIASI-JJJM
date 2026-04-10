@@ -155,7 +155,6 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
 
     while (actual != nullptr) {
         camino.push_back(actual);
-
         nodo* padre = nullptr;
         for (nodo* n : cerrados) {
             if (n->id == actual->idPadre) {
@@ -167,9 +166,13 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
     }
     reverse(camino.begin(), camino.end());
     cout << "\n=== SOLUCIÓN ===" << endl;
-    for (int i = 0; i < cerrados.size(); i++) {
-        cout << cerrados[i]->id << " (" << cerrados[i]->idPadre << ")";
-        if (i < cerrados.size() - 1) {
+    for (int i = 0; i < camino.size(); i++) {
+        camino[i]->tab.mostrarMatriz();
+        cout << endl;
+    }
+    for (int i = 0; i < camino.size(); i++) {
+        cout << camino[i]->id << " (" << cerrados[i]->idPadre << ")";
+        if (i < camino.size() - 1) {
             cout << ", ";
         }
     }
@@ -409,12 +412,11 @@ void jugar::metodoBusquedaPrimeroMejorAC()
             Tablero auxiliar = actual->tab;
             m.first = auxiliar.matriz[m.first->partes.front().first][m.first->partes.front().second];
             auxiliar.realizarMovimiento(m);
-            cont++;
 
             if (!existeEnCerrados(cerrados, auxiliar)) {
                 i++;
                 int hAuxiliar = calcularHeuristica(&auxiliar);
-                nodo *hijo = new nodo(cont, actual->id, hAuxiliar, auxiliar, m.first->letra);
+                nodo *hijo = new nodo(cont++, actual->id, hAuxiliar, auxiliar, m.first->letra);
                 abiertos.push(hijo);
             }
         }
