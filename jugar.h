@@ -45,7 +45,7 @@ public:
     jugar();
     void elegirHeuristica();
     void elegirMetodo();
-    void mostrarMovimientos(Tablero &t, int &i, int &h);
+    void mostrarMovimientos(Tablero &t, int &h);
     bool mostrarUnMovimientoEstocastica(int &i, int &h);
     void mostrarMovimientosAC(int &indice, int &heuristica, Tablero *t, pair<Vehiculo*, Tablero::direccion> *mov);
     bool existeEnCerrados(const vector<nodo*>& cerrados, const Tablero& tabActual);

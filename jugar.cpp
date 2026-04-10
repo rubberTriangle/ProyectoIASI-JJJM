@@ -66,9 +66,9 @@ void jugar::elegirMetodo () {
     cout << endl;
 }
 
-void jugar::mostrarMovimientos(Tablero &t, int &indice, int &heuristica)
+void jugar::mostrarMovimientos(Tablero &t, int &heuristica)
 {
-    indice = 0;
+    int indice = 0;
     movimientosPosibles = t.movimientosPosibles();
 
     heuristica = INT_MAX;
@@ -260,24 +260,53 @@ void jugar::printElapsedTime(chrono::time_point<chrono::system_clock, std::chron
 void jugar::metodoEscaladaSimple()
 {
     auto begin = std::chrono::high_resolution_clock::now();
-    int i = 0;
-    int h_siguiente;
-
     int h_actual = calcularHeuristica(&tableroInicial);
+    Tablero tableroAuxiliar = tableroInicial;
 
-    while(!tableroInicial.comprobarFin()){
-        this->mostrarMovimientos(this->tableroInicial, i, h_siguiente);
+    while(!tableroAuxiliar.comprobarFin()){
+        auto m = tableroAuxiliar.movimientosPosibles();
 
-        if (h_siguiente >= h_actual) {
+        if (m.empty()) {
+            cout << "No hay movimientos posibles desde este estado." << endl;
+            break;
+        }
+
+        int min_h = 0;
+        int mejor_h_vecino = INT_MAX;
+
+        for(size_t i = 0; i < m.size(); i++){
+            Tablero aux = tableroAuxiliar;
+            aux.realizarMovimiento(m[i]);
+
+            int h_eval = calcularHeuristica(&aux);
+
+            if(h_eval < mejor_h_vecino){
+                mejor_h_vecino = h_eval;
+                min_h = i;
+            }
+        }
+
+        if (mejor_h_vecino >= h_actual) {
             cout << "\n¡Atascado en un óptimo local! No hay movimientos que mejoren la heurística." << endl;
             break;
         }
 
-        h_actual = h_siguiente;
+        h_actual = mejor_h_vecino;
+        tableroAuxiliar.realizarMovimiento(m[min_h]);
 
-        this->tableroInicial.realizarMovimiento(this->tableroInicial.movimientosPosibles()[i]);
+        cout << "Movimiento realizado:" << endl;
+        cout << "Vehículo movido: " << m[min_h].first->letra << ", heurística: " << h_actual << endl;
+        tableroAuxiliar.mostrarMatriz();
+
         cont++;
     }
+
+    if(tableroAuxiliar.comprobarFin()){
+        cout << "Objetivo alcanzado" << endl;
+    }else{
+        cout << "No se ha alcanzado el objetivo" << endl;
+    }
+
     printElapsedTime(begin);
 }
 
