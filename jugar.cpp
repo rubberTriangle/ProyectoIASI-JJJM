@@ -276,7 +276,7 @@ void jugar::metodoEscaladaSimple()
 
         for(size_t i = 0; i < m.size(); i++){
             Tablero aux = tableroAuxiliar;
-            aux.realizarMovimiento(m[i]);
+            aux.realizarMovimiento({aux.matriz[m[i].first->partes.front().first][m[i].first->partes.front().second], m[i].second});
 
             int h_eval = calcularHeuristica(&aux);
 
@@ -525,7 +525,7 @@ public:
     }
 };
 
-bool jugar::metodoBusquedaHaz()//NOTE: estamos contando sólo los objetos nodo creados, no habría que quizá contar los tableros generados/movimientos probados?
+bool jugar::metodoBusquedaHaz()
 {
     int width;
     string in;
