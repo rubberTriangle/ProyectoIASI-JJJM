@@ -173,13 +173,6 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
         camino[i]->tab.mostrarMatriz();
         cout << endl;
     }
-    for (int i = 1; i < camino.size(); i++) {
-        cout << camino[i]->vehiculo;
-        if (i < camino.size() - 1) {
-            cout << " -> ";
-        }
-    }
-    cout << endl;
 }
 
 void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos) {
