@@ -429,7 +429,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         buscarNodosSolucion(cerrados);
     }
     else {
-        cout << "No tiene solución" << endl;
+        cout << "No se ha encontrado la solución." << endl;
     }
 
     printElapsedTime(begin);
@@ -662,7 +662,7 @@ bool jugar::metodoBusquedaHaz()
     for(auto &pair : cerrados)
         delete pair.second;
     if(!found)
-        cout << "No se ha encontrado la solución...\n";
+        cout << "No se ha encontrado la solución.\n";
     printElapsedTime(begin);
     return found;
 }
