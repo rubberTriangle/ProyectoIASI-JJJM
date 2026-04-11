@@ -381,7 +381,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
     vector <nodo*> cerrados;
 
-    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial, ' '};
+    nodo *inicial = new nodo {cont, -1, calcularHeuristica(&tableroInicial), tableroInicial, ' '};
     abiertos.push(inicial);
 
     while (!abiertos.empty()) {
