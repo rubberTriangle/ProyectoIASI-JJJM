@@ -344,7 +344,7 @@ void jugar::metodoEscaladaSimple()
 
 void jugar::metodoEscaladaSimpleEstocastica()
 {
-    cout << "Introducir valor de alfa (Pulsar enter para valor predeterminado" << endl;
+    cout << "Introducir valor de alfa (Pulsar enter para valor predeterminado):" << endl;
     getline(std::cin, alfa);
     if (alfa.empty()) {
         alfa = "3";
