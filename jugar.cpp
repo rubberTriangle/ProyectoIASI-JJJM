@@ -555,6 +555,7 @@ void jugar::metodoBusquedaAstar()
                             //mostramos solución
                             cout << "Solución:\n";
                             vector<Anodo*> sol;
+                            vector<char> path;
                             for(Tablero* ctab = &newTab; nodoActual->padre != nullptr; nodoActual = nodoActual->padre){
                                 sol.push_back(nodoActual);
                                 ctab = &nodoActual->tab;
@@ -564,11 +565,18 @@ void jugar::metodoBusquedaAstar()
                                 cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
                                 (*it)->tab.mostrarMatriz();
                                 cout << endl;
+                                path.push_back((*it)->vehiculoMovido);
                             }
                             //mostramos final
                             cout << "Vehiculo movido: " << mov.first->letra << endl;
                             newTab.mostrarMatriz();
                             cout << endl;
+                            
+                            cout << "Solución: ";
+                            for (int i = 0; i < path.size(); i++)
+                                cout << path[i] << ", ";
+                            cout << mov.first->letra << endl;
+                            
                             //limpiamos los abiertos que queden:
                             while(!abiertos.empty()){
                                 delete abiertos.top();
