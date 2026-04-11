@@ -467,95 +467,99 @@ void jugar::metodoBusquedaAstar()
     auto begin = std::chrono::high_resolution_clock::now();
     ModifiableHeap<Anodo*, std::greater<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
-    Anodo* nodoActual = new Anodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial), 0);
-    bool solucionado = false;
-    
-    abiertos.push(nodoActual);
-    while(!abiertos.empty()){
-        nodoActual = abiertos.top();
-        abiertos.pop();
-        cerrados.insert({nodoActual->tab.key(), nodoActual});
+    if(tableroInicial.comprobarFin()){//comprobamos edge case de que nos den un tablero solucionado
+        cout << "El tablero ya está solucionado.\n";
+    }else{
+        Anodo* nodoActual = new Anodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial), 0);
+        bool solucionado = false;
         
-        //generar hijos
-        vector<pair<Vehiculo*, Tablero::direccion>> posibles = nodoActual->tab.movimientosPosibles();
-        
-        for(auto mov : posibles){
-            Tablero newTab(nodoActual->tab);
-            mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
-            newTab.realizarMovimiento(mov);
-            cont++;
+        abiertos.push(nodoActual);
+        while(!abiertos.empty()){
+            nodoActual = abiertos.top();
+            abiertos.pop();
+            cerrados.insert({nodoActual->tab.key(), nodoActual});
             
-            if(cerrados.count(newTab.key()) > 0){//está el nuevo nodo en cerrados?
-                Anodo* old = cerrados.find(newTab.key())->second;
-                if(old->g > nodoActual->g+1){//old es peor, se sobreescribe
-                    old->g = nodoActual->g+1;
-                    old->padre = nodoActual;
-                    old->cascadeG();
-                }//si el nuevo es peor o igual lo ignoramos
-            }else{
-                //buscamos repetidos
-                bool repe = false;
-                int repeIndex = 0;
-                for(; repeIndex < abiertos.size() && !repe; repeIndex++)
-                    if(newTab == abiertos[repeIndex]->tab)
-                        repe = true;
-                repeIndex--;//el for añade 1 de más antes de salir
+            //generar hijos
+            vector<pair<Vehiculo*, Tablero::direccion>> posibles = nodoActual->tab.movimientosPosibles();
+            
+            for(auto mov : posibles){
+                Tablero newTab(nodoActual->tab);
+                mov.first = newTab.matriz[mov.first->partes.front().first][mov.first->partes.front().second];//traducción de movimiento a nuevo tablero
+                newTab.realizarMovimiento(mov);
+                cont++;
                 
-                if(repe){//esta repetido
-                    if(nodoActual->g+1 < abiertos[repeIndex]->g){//es el nuevo mejor?
-                        //si sí, sobreescribe
-                        abiertos[repeIndex]->g = nodoActual->g+1;
-                        //lo quitamos de la lista de hijos de su padre
-                        vector<Anodo*> & hijosPadre = abiertos[repeIndex]->padre->hijos;
-                        auto it = hijosPadre.begin();
-                        for(; it != hijosPadre.end(); it++)
-                            if(*it == abiertos[repeIndex])
-                                break;
-                        hijosPadre.erase(it);
-                        abiertos[repeIndex]->padre = nodoActual;
-                        nodoActual->hijos.push_back(abiertos[repeIndex]);
-                        abiertos.upheap(repeIndex);//lo hemos mejorado por lo que ascenderá
-                    }//si es peor lo descartamos
+                if(cerrados.count(newTab.key()) > 0){//está el nuevo nodo en cerrados?
+                    Anodo* old = cerrados.find(newTab.key())->second;
+                    if(old->g > nodoActual->g+1){//old es peor, se sobreescribe
+                        old->g = nodoActual->g+1;
+                        old->padre = nodoActual;
+                        old->cascadeG();
+                    }//si el nuevo es peor o igual lo ignoramos
                 }else{
-                    if(newTab.comprobarFin()){//solución encontrada!
-                        cout << "¡Objetivo alcanzado!" << endl;
-                        solucionado = true;
-                        //mostramos solución
-                        cout << "Solución:\n";
-                        vector<Anodo*> sol;
-                        for(Tablero* ctab = &newTab; nodoActual->padre != nullptr; nodoActual = nodoActual->padre){
-                            sol.push_back(nodoActual);
-                            ctab = &nodoActual->tab;
-                        }
-                        //retrazamos desde el principio
-                        for(auto it = sol.rbegin(); it != sol.rend(); it++){
-                            cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
-                            (*it)->tab.mostrarMatriz();
+                    //buscamos repetidos
+                    bool repe = false;
+                    int repeIndex = 0;
+                    for(; repeIndex < abiertos.size() && !repe; repeIndex++)
+                        if(newTab == abiertos[repeIndex]->tab)
+                            repe = true;
+                    repeIndex--;//el for añade 1 de más antes de salir
+                    
+                    if(repe){//esta repetido
+                        if(nodoActual->g+1 < abiertos[repeIndex]->g){//es el nuevo mejor?
+                            //si sí, sobreescribe
+                            abiertos[repeIndex]->g = nodoActual->g+1;
+                            //lo quitamos de la lista de hijos de su padre
+                            vector<Anodo*> & hijosPadre = abiertos[repeIndex]->padre->hijos;
+                            auto it = hijosPadre.begin();
+                            for(; it != hijosPadre.end(); it++)
+                                if(*it == abiertos[repeIndex])
+                                    break;
+                            hijosPadre.erase(it);
+                            abiertos[repeIndex]->padre = nodoActual;
+                            nodoActual->hijos.push_back(abiertos[repeIndex]);
+                            abiertos.upheap(repeIndex);//lo hemos mejorado por lo que ascenderá
+                        }//si es peor lo descartamos
+                    }else{
+                        if(newTab.comprobarFin()){//solución encontrada!
+                            cout << "¡Objetivo alcanzado!" << endl;
+                            solucionado = true;
+                            //mostramos solución
+                            cout << "Solución:\n";
+                            vector<Anodo*> sol;
+                            for(Tablero* ctab = &newTab; nodoActual->padre != nullptr; nodoActual = nodoActual->padre){
+                                sol.push_back(nodoActual);
+                                ctab = &nodoActual->tab;
+                            }
+                            //retrazamos desde el principio
+                            for(auto it = sol.rbegin(); it != sol.rend(); it++){
+                                cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
+                                (*it)->tab.mostrarMatriz();
+                                cout << endl;
+                            }
+                            //mostramos final
+                            cout << "Vehiculo movido: " << mov.first->letra << endl;
+                            newTab.mostrarMatriz();
                             cout << endl;
+                            //limpiamos los abiertos que queden:
+                            while(!abiertos.empty()){
+                                delete abiertos.top();
+                                abiertos.pop();
+                            }
+                            break;
+                        }else{//el nuevo nodo no es el final
+                            Anodo* newNodo = new Anodo(nodoActual, newTab, mov.first->letra, calcularHeuristica(&newTab), nodoActual->g+1);
+                            nodoActual->hijos.push_back(newNodo);
+                            abiertos.push(newNodo);
                         }
-                        //mostramos final
-                        cout << "Vehiculo movido: " << mov.first->letra << endl;
-                        newTab.mostrarMatriz();
-                        cout << endl;
-                        //limpiamos los abiertos que queden:
-                        while(!abiertos.empty()){
-                            delete abiertos.top();
-                            abiertos.pop();
-                        }
-                        break;
-                    }else{//el nuevo nodo no es el final
-                        Anodo* newNodo = new Anodo(nodoActual, newTab, mov.first->letra, calcularHeuristica(&newTab), nodoActual->g+1);
-                        nodoActual->hijos.push_back(newNodo);
-                        abiertos.push(newNodo);
                     }
                 }
             }
         }
+        for(auto &pair : cerrados)
+            delete pair.second;
+        if(!solucionado)
+            cout << "No se ha encontrado solución.\n";
     }
-    for(auto &pair : cerrados)
-        delete pair.second;
-    if(!solucionado)
-        cout << "No se ha encontrado solución.\n";
     printElapsedTime(begin);
 }
 
