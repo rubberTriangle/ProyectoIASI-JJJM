@@ -181,6 +181,7 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
         if (i < camino.size() - 1) {
             cout << ", ";
         }
+        cout << endl;
     }
 }
 
