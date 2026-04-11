@@ -455,17 +455,17 @@ struct Anodo{
         return h+g;
     }
 };
-template<> class std::less<Anodo*>{
+template<> class std::greater<Anodo*>{
 public:
     constexpr bool operator()(Anodo* lhs, Anodo* rhs) const{
-        return lhs->f() < rhs->f();
+        return lhs->f() > rhs->f();
     }
 };
 
 void jugar::metodoBusquedaAstar()
 {
     auto begin = std::chrono::high_resolution_clock::now();
-    ModifiableHeap<Anodo*, std::less<Anodo*>> abiertos;
+    ModifiableHeap<Anodo*, std::greater<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
     Anodo* nodoActual = new Anodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial), 0);
     bool solucionado = false;
@@ -567,10 +567,10 @@ struct Hnodo{
     Hnodo(Hnodo* padre, Tablero const& tab, char vehiculoMovido, float h)
         : padre(padre), tab(tab), vehiculoMovido(vehiculoMovido), h(h){}
 };
-template<> class std::less<Hnodo*>{
+template<> class std::greater<Hnodo*>{
 public:
     constexpr bool operator()(Hnodo* lhs, Hnodo* rhs) const{
-        return lhs->h < rhs->h;
+        return lhs->h > rhs->h;
     }
 };
 
@@ -589,10 +589,10 @@ bool jugar::metodoBusquedaHaz()
     
     bool found = false;
     unordered_map<string, Hnodo*> cerrados;//(para limpieza, retrazar la solución y evitar ciclos)
-    priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> abiertos;
+    priority_queue<Hnodo*, vector<Hnodo*>, std::greater<Hnodo*>> abiertos;
     
     abiertos.push(new Hnodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial)));
-    priority_queue<Hnodo*, vector<Hnodo*>, std::less<Hnodo*>> hijos;//siguiente capa generada
+    priority_queue<Hnodo*, vector<Hnodo*>, std::greater<Hnodo*>> hijos;//siguiente capa generada
     
     while(!abiertos.empty()){
         while(!abiertos.empty()){
