@@ -658,6 +658,7 @@ bool jugar::metodoBusquedaHaz()
                         //mostramos solución
                         cout << "Solución:\n";
                         vector<Hnodo*> sol;
+                        vector<char> path;
                         for(Tablero* ctab = &newTab; actual->padre != nullptr; actual = actual->padre){
                             sol.push_back(actual);
                             ctab = &actual->tab;
@@ -667,11 +668,18 @@ bool jugar::metodoBusquedaHaz()
                             cout << "Vehiculo movido: " << (*it)->vehiculoMovido << endl;
                             (*it)->tab.mostrarMatriz();
                             cout << endl;
+                            path.push_back((*it)->vehiculoMovido);
                         }
                         //mostramos final
                         cout << "Vehiculo movido: " << mov.first->letra << endl;
                         newTab.mostrarMatriz();
                         cout << endl;
+                        
+                        cout << "Solución: ";
+                        for (int i = 0; i < path.size(); i++)
+                            cout << path[i] << ", ";
+                        cout << mov.first->letra << endl;
+                        
                         //limpiamos los abiertos que queden e hijos ahora innecesarios:
                         while(!abiertos.empty()){
                             delete abiertos.top();
