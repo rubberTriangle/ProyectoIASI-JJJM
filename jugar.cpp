@@ -173,10 +173,10 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
         camino[i]->tab.mostrarMatriz();
         cout << endl;
     }
-    for (int i = 0; i < camino.size(); i++) {
-        cout << camino[i]->id << " (" << cerrados[i]->idPadre << ")";
+    for (int i = 1; i < camino.size(); i++) {
+        cout << camino[i]->vehiculo;
         if (i < camino.size() - 1) {
-            cout << ", ";
+            cout << " -> ";
         }
     }
     cout << endl;
@@ -431,8 +431,13 @@ void jugar::metodoBusquedaPrimeroMejorAC()
         mostrarAbiertos(abiertos);
         mostrarCerrados(cerrados);
     }
-
-    buscarNodosSolucion(cerrados);
+    nodo *n = cerrados.back();
+    if (n->tab.comprobarFin()) {
+        buscarNodosSolucion(cerrados);
+    }
+    else {
+        cout << "No tiene solución" << endl;
+    }
 
     printElapsedTime(begin);
 }
