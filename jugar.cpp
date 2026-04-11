@@ -30,6 +30,7 @@ jugar::jugar() {
     default:
         cout << "El método seleccionado no está disponible" << endl;
     }
+
     cout << "Nodos generados: " << cont << endl;
 }
 
@@ -60,6 +61,7 @@ void jugar::elegirMetodo () {
         resolucionSeleccionada = "0";
     }
     sSelecIndex = std::stoi(resolucionSeleccionada);
+    cout << "\nEl método seleccionado es: " << resolucion[sSelecIndex] << endl;
 
     cout << "Matriz cargada:\n";
     tableroInicial.mostrarMatriz();
@@ -172,6 +174,13 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
         cout << "Vehículo movido: " << camino[i]->vehiculo << endl;
         camino[i]->tab.mostrarMatriz();
         cout << endl;
+    }
+    cout << "Solución: ";
+    for (int i = 1; i < camino.size(); i++) {
+        cout << camino[i]->vehiculo;
+        if (i < camino.size() - 1) {
+            cout << ", ";
+        }
     }
 }
 
@@ -291,6 +300,7 @@ void jugar::printElapsedTime(chrono::time_point<chrono::system_clock, std::chron
 
 void jugar::metodoEscaladaSimple()
 {
+    vector <char> solucion;
     auto begin = std::chrono::high_resolution_clock::now();
     int h_actual = calcularHeuristica(&tableroInicial);
     Tablero tableroAuxiliar = tableroInicial;
@@ -328,6 +338,7 @@ void jugar::metodoEscaladaSimple()
 
         cout << "Movimiento realizado:" << endl;
         cout << "Vehículo movido: " << m[min_h].first->letra << ", heurística: " << h_actual << endl;
+        solucion.push_back((m[min_h].first->letra));
         tableroAuxiliar.mostrarMatriz();
 
         cont++;
@@ -335,6 +346,14 @@ void jugar::metodoEscaladaSimple()
 
     if(tableroAuxiliar.comprobarFin()){
         cout << "Objetivo alcanzado" << endl;
+        cout << "\nSolución: ";
+        for (int i = 0; i < solucion.size(); i++) {
+            cout << solucion[i];
+            if (i < solucion.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << endl;
     }else{
         cout << "No se ha alcanzado el objetivo" << endl;
     }
@@ -344,6 +363,7 @@ void jugar::metodoEscaladaSimple()
 
 void jugar::metodoEscaladaSimpleEstocastica()
 {
+    vector <char> solucion;
     cout << "Introducir valor de alfa (Pulsar enter para valor predeterminado):" << endl;
     getline(std::cin, alfa);
     if (alfa.empty()) {
@@ -361,10 +381,19 @@ void jugar::metodoEscaladaSimpleEstocastica()
             vector<pair<Vehiculo*, Tablero::direccion>> mov = this->tableroInicial.movimientosPosibles();
             this->tableroInicial.realizarMovimiento(mov[i]);
             cout << "Vehículo movido: " << mov[i].first->letra << endl;
+            solucion.push_back(mov[i].first->letra);
             cont++;
 
             if(tableroInicial.comprobarFin()) {
                 cout << "¡Objetivo alcanzado!" << endl;
+                cout << "\nSolución: ";
+                for (int i = 0; i < solucion.size(); i++) {
+                    cout << solucion[i];
+                    if (i < solucion.size() - 1) {
+                        cout << ", ";
+                    }
+                }
+                cout << endl;
             break;
             }
         }
@@ -381,7 +410,7 @@ void jugar::metodoBusquedaPrimeroMejorAC()
     priority_queue <nodo*, vector <nodo*>, CompararNodos> abiertos;
     vector <nodo*> cerrados;
 
-    nodo *inicial = new nodo {cont, -1, calcularHeuristica(&tableroInicial), tableroInicial, ' '};
+    nodo *inicial = new nodo {cont++, -1, calcularHeuristica(&tableroInicial), tableroInicial, ' '};
     abiertos.push(inicial);
 
     while (!abiertos.empty()) {
