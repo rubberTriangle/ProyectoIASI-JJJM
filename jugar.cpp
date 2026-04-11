@@ -470,6 +470,7 @@ void jugar::metodoBusquedaAstar()
     ModifiableHeap<Anodo*, std::less<Anodo*>> abiertos;
     unordered_map<std::string,Anodo*> cerrados;
     Anodo* nodoActual = new Anodo(nullptr, tableroInicial, ' ', calcularHeuristica(&tableroInicial), 0);
+    bool solucionado = false;
     
     abiertos.push(nodoActual);
     while(!abiertos.empty()){
@@ -520,6 +521,7 @@ void jugar::metodoBusquedaAstar()
                 }else{
                     if(newTab.comprobarFin()){//solución encontrada!
                         cout << "¡Objetivo alcanzado!" << endl;
+                        solucionado = true;
                         //mostramos solución
                         cout << "Solución:\n";
                         vector<Anodo*> sol;
@@ -554,6 +556,8 @@ void jugar::metodoBusquedaAstar()
     }
     for(auto &pair : cerrados)
         delete pair.second;
+    if(!solucionado)
+        cout << "No se ha encontrado solución.\n";
     printElapsedTime(begin);
 }
 
