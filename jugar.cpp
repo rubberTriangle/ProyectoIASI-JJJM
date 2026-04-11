@@ -166,7 +166,10 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
     }
     reverse(camino.begin(), camino.end());
     cout << "\n=== SOLUCIÓN ===" << endl;
-    for (int i = 0; i < camino.size(); i++) {
+    camino[0]->tab.mostrarMatriz();
+    cout << endl;
+    for (int i = 1; i < camino.size(); i++) {
+        cout << "Vehículo movido: " << camino[i]->vehiculo << endl;
         camino[i]->tab.mostrarMatriz();
         cout << endl;
     }
