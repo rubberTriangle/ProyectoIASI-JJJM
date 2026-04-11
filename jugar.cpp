@@ -231,9 +231,18 @@ void jugar::metodoIDA()
     int umbral = calcularHeuristica(&tableroInicial);
 
     while(true){
-        int temp = busquedaIDA(tableroInicial, 0, umbral);
+        vector<char> path;
+        int temp = busquedaIDA(tableroInicial, 0, umbral, path);
 
         if(temp == -1){
+            if(path.empty())
+                cout << "\nEl tablero ya está solucionado.\n";
+            else{
+                cout << "\nSolución: ";
+                for (int i = 0; i < path.size()-1; i++)
+                    cout << path[i] << ", ";
+                cout << path.back() << endl;
+            }
             break;
         }else if(temp == -2){
             cout << "\nLímite de nodos generados excedido, este tablero probablemente no tenga solución.\n";
@@ -247,7 +256,7 @@ void jugar::metodoIDA()
     printElapsedTime(begin);
 }
 
-int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
+int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral, vector<char> & path)
 {
     int f = g + calcularHeuristica(&tableroActual);
 
@@ -274,11 +283,12 @@ int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
             auxiliar.realizarMovimiento(m);
             cont++;
 
-            int temp = busquedaIDA(auxiliar, g + 1, umbral);
+            int temp = busquedaIDA(auxiliar, g + 1, umbral, path);
 
             if(temp == -1){
                 cout << "\nPaso en profundidad " << g + 1 << ", Vehiculo movido: '" << m.first->letra << "'" << endl;
                 auxiliar.mostrarMatriz();
+                path.push_back(m.first->letra);
                 return -1;
             }
 

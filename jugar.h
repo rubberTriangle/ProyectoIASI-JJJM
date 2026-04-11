@@ -40,8 +40,8 @@ private:
             return a->coste > b->coste;
         }
     };
-
-    int busquedaIDA(Tablero &tableroActual, int g, int umbral);
+    
+    int busquedaIDA(Tablero &tableroActual, int g, int umbral, vector<char> &path);
     inline void printElapsedTime(chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, ratio<1,1000000000>>> begin);
 
 public:
