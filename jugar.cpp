@@ -181,8 +181,8 @@ void jugar::buscarNodosSolucion (vector <nodo*> cerrados) {
         if (i < camino.size() - 1) {
             cout << ", ";
         }
-        cout << endl;
     }
+    cout << endl;
 }
 
 void jugar::mostrarAbiertos(priority_queue<nodo*, vector <nodo*>, CompararNodos> abiertos) {
