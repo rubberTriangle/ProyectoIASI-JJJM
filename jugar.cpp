@@ -233,6 +233,9 @@ void jugar::metodoIDA()
 
         if(temp == -1){
             break;
+        }else if(temp == -2){
+            cout << "\nLimite de nodos generados excedido, este tablero probablemente no tenga solución.\n";
+            break;
         }else if(temp == INT_MAX){
             cout << "\nNo se ha encontrado solucion." << endl;
         }else{
@@ -249,6 +252,8 @@ int jugar::busquedaIDA(Tablero &tableroActual, int g, int umbral)
     if(f > umbral){
         return f;
     }
+    if(cont > MAX_CONT)
+        return -2;
 
     if(tableroActual.comprobarFin()){
         tableroActual.mostrarMatriz();

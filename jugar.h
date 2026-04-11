@@ -7,6 +7,8 @@
 #include <queue>
 #include "Tablero.h"
 
+const int MAX_CONT = 100000;//máximo para failsafes en caso de que algoritmos no salgan si no encuentran solución
+
 class jugar {
 private:
     Tablero tableroInicial;
